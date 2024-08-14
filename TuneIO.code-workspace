@@ -1,14 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../Makinator"
-		},
-		{
-			"path": "../ForoPEC/web"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "path": "../Makinator",
+    },
+    {
+      "path": "../ForoPEC/web",
+    },
+  ],
+  "settings": {},
 }
