@@ -12,7 +12,7 @@ export default function HomeButton({ page, double }: HomeButtonProps) {
     >
       <img
         className="m-auto h-24 z-20 duration-300 group-hover:drop-shadow-doodle"
-        src={`/${page}_doodle.svg`}
+        src={`/doodles/${page}_doodle.svg`}
       />
     </Link>
   );

@@ -29,7 +29,7 @@ export default function PlayButton({
     >
       <img
         className={"h-20 my-auto " + (!isDark ? "dark_doodle " : "")}
-        src={img ?? `/${title}_doodle.svg`}
+        src={img ?? `/doodles/${title}_doodle.svg`}
       />
       <p className="mx-auto">{title.toLocaleUpperCase()}</p>
     </Link>

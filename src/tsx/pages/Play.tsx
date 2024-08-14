@@ -14,7 +14,7 @@ export default function Play() {
               <PlayButton
                 title={"daily song"}
                 link={"/listen/daily"}
-                img="/song_doodle.svg"
+                img="/doodles/song_doodle.svg"
                 color="bg-air_force_blue"
               />
               <PlayButton
