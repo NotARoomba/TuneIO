@@ -1,14 +1,20 @@
 import { Link } from "react-router-dom";
 import { PlayButtonProps } from "../../utils/Types";
 
-export default function PlayButton({ title, link, img }: PlayButtonProps) {
+export default function PlayButton({
+  title,
+  link,
+  img,
+  color,
+}: PlayButtonProps) {
   const colors = [
     "bg-midnight_green",
     "bg-air_force_blue",
     "bg-ash_gray",
+    "bg-lime_green",
     "bg-beige",
   ];
-  const bg = colors[Math.floor(Math.random() * colors.length)];
+  const bg = color ?? colors[Math.floor(Math.random() * colors.length)];
   const isDark = colors.indexOf(bg) < 2;
   return (
     <Link
