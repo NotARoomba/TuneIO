@@ -10,7 +10,7 @@ export default function Play() {
         <div className="flex flex-col gap-2">
           <p>Listening</p>
           <div className="overflow-auto">
-            <div className="flex overflow-scroll  w-fit gap-5 pr-4">
+            <div className="flex overflow-scroll overflow-y-hidden  w-fit gap-5 pr-4">
               <PlayButton
                 title={"daily song"}
                 link={"/listen/daily"}
@@ -33,7 +33,7 @@ export default function Play() {
         <div className="flex flex-col gap-2">
           <p>Typing</p>
           <div className="overflow-auto">
-            <div className="flex overflow-scroll  w-fit gap-5 pr-4">
+            <div className="flex overflow-x-scroll overflow-y-hidden  w-fit gap-5 pr-4">
               <PlayButton
                 title={"lyrics"}
                 link={"/type/lyrics"}

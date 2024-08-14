@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
+import { AnimationProps, motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
-const animationConfiguration = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
+const animationConfiguration: AnimationProps["variants"] = {
+  initial: { opacity: 0, x: 100 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -100 },
 };
 export default function Transitions(props: React.PropsWithChildren) {
   const location = useLocation();
@@ -16,7 +16,7 @@ export default function Transitions(props: React.PropsWithChildren) {
       initial="initial"
       animate="animate"
       exit="exit"
-      transition={{ duration: 5, type: "spring", stiffness: 50, mass: 5 }}
+      transition={{ duration: 5, type: "spring", stiffness: 50, mass: 1 }}
     >
       {props.children}
     </motion.div>
