@@ -14,7 +14,7 @@ export default function PlayButton({ title, link, img }: PlayButtonProps) {
     <Link
       to={link}
       className={
-        "w-40 transition-all duration-300 p-2 aspect-square flex flex-col rounded-xl jusitfy-center font-medium text-4xl hover:shadow-inner-figma " +
+        "w-40 transition-all duration-300 p-2 aspect-square flex flex-col rounded-xl jusitfy-center font-medium text-2xl hover:shadow-inner-figma " +
         (isDark
           ? "text-beige hover:brightness-125 "
           : "text-rich_black hover:brightness-75 ") +

@@ -10,7 +10,7 @@ export default function Play() {
           <p>Listening</p>
           <div className="overflow-auto">
             <div className="flex overflow-scroll  w-fit gap-5 pr-4">
-              <PlayButton title={"song"} link={"/listen/song"} />
+              <PlayButton title={"daily song"} link={"/listen/daily"} img="/song_doodle.svg" />
               <PlayButton title={"album"} link={"/listen/album"} />
               <PlayButton title={"artist"} link={"/listen/artist"} />
             </div>
