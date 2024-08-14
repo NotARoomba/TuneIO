@@ -5,7 +5,7 @@ export default function Home() {
 
   return (
     <>
-      <h1 className='text-6xl'>Vite + React</h1>
+      <h1 className='text-6xl'>TuneIO</h1>
       <div>
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
