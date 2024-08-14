@@ -46,11 +46,11 @@ usersRouter.post("/update", async (req: Request, res: Response) => {
   try {
     if (collections.users) {
       if (data._id) {
-        id = new ObjectId(data._id)
-        const {email, username, avatar} = data
+        id = new ObjectId(data._id);
+        const { email, username, avatar } = data;
         await collections.users.updateOne(
           { _id: id },
-          { $set: {email, username, avatar} },
+          { $set: { email, username, avatar } },
         );
       } else {
         const res = await collections.users.updateOne(
@@ -90,7 +90,7 @@ usersRouter.post("/check", async (req: Request, res: Response) => {
       res.status(200).send({ status: STATUS_CODES.USERNAME_IN_USE });
     else res.status(200).send({ status: STATUS_CODES.NONE_IN_USE });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({ status: STATUS_CODES.GENERIC_ERROR });
   }
 });
@@ -115,9 +115,8 @@ usersRouter.get("/:userID/highscores", async (req: Request, res: Response) => {
             gamesPlayed: (data as any)[service][game].length,
           });
         } else {
-          highscores.push({game: {score: 0}, gamesPlayed: 0});
+          highscores.push({ game: { score: 0 }, gamesPlayed: 0 });
         }
-        
       }
     }
     res.send({ highscores, status: STATUS_CODES.SUCCESS });

@@ -22,12 +22,7 @@ export const verifyRouter = express.Router();
 verifyRouter.use(express.json());
 
 const getVerificationCode = (email: string) => {
-  return SHA256(
-    email +
-      (
-        Math.floor(Date.now() / (2 * 60 * 1000))
-      ).toString(),
-  )
+  return SHA256(email + Math.floor(Date.now() / (2 * 60 * 1000)).toString())
     .toString()
     .replace(/[^0-9]/g, "")
     .substring(0, 6);

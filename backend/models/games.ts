@@ -1,26 +1,25 @@
 export interface ListeningData {
-  songGames: Array<ListeningGame>
-  albumGames: Array<ListeningGame>
-  artistGames: Array<ListeningGame>
+  songGames: Array<ListeningGame>;
+  albumGames: Array<ListeningGame>;
+  artistGames: Array<ListeningGame>;
 }
 
 export interface TypingData {
-  lyricsGames: Array<TypingGame>
-  albumGames: Array<TypingGame>
-  artistGames: Array<TypingGame>
+  lyricsGames: Array<TypingGame>;
+  albumGames: Array<TypingGame>;
+  artistGames: Array<TypingGame>;
 }
-
 
 export enum GAME_TYPES {
   SONG,
   ALBUM,
   ARTIST,
-  LYRICS
+  LYRICS,
 }
 
 export interface ListeningGame extends Game {
   guesses: number;
-};
+}
 
 export interface Game {
   gameType: GAME_TYPES;
