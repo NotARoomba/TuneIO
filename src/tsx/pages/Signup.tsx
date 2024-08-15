@@ -78,7 +78,7 @@ export default function Signup() {
         const delayDebounceFn = setTimeout(async () => {
             setLoading(true);
           console.log(album)
-          const res = await callAPI("/music/search", "GET", {
+          const res = await callAPI("/music/search", "POST", {
             query: album,
             type: "album",
           });

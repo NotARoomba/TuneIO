@@ -38,7 +38,7 @@ refreshToken();
 
 musicRouter.use(express.json());
 
-musicRouter.get("/search", async (req: Request, res: Response) => {
+musicRouter.post("/search", async (req: Request, res: Response) => {
     console.log(req)
     const data: Search = req.body;
     try {
