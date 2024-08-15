@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface TitleProps {
   text: string;
   reverse?: boolean;
@@ -17,3 +19,61 @@ export interface PageButtonProps {
   link: string;
   color?: string;
 }
+
+export enum STATUS_CODES {
+  SUCCESS,
+  GENERIC_ERROR,
+  USER_NOT_FOUND,
+  INVALID_EMAIL,
+  INVALID_SERVICE,
+  SENT_CODE,
+  EMAIL_NOT_EXIST,
+  ERROR_SENDING_CODE,
+  CODE_DENIED,
+  CODE_EXPIRED,
+  CODE_FAILED,
+  NO_CONNECTION,
+  EMAIL_IN_USE,
+  USERNAME_IN_USE,
+  NONE_IN_USE,
+}
+
+export interface User {
+    _id: string,
+    avatar: string,
+    username: string,
+    email: string,
+    dateJoined: Date,
+}
+
+export interface LoadingScreenProps {
+  loading: boolean;
+  text?: string;
+  children?: ReactNode;
+}
+
+export interface BaseModalProps {
+  isOpen: boolean;
+  setIsOpen: (o: boolean) => void;
+}
+
+export interface AlertModalProps extends BaseModalProps {
+  title: string;
+  text: string;
+  cancel?: boolean;
+  action?: () => void;
+}
+
+export interface VerificationModalProps extends BaseModalProps {
+  email: string;
+  action: (v: boolean) => void;
+}
+
+export interface LinkButtonProps {
+  text: string;
+  route?: string;
+  action?: () => void;
+  disabled?: boolean;
+  selected?: boolean;
+}
+

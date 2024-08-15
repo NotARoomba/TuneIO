@@ -5,6 +5,7 @@ import { verifyRouter } from "./routers/verify.router";
 import { usersRouter } from "./routers/users.router";
 import { AuthError, HMAC } from "hmac-auth-express";
 import { gamesRouter } from "./routers/games.router";
+import { musicRouter } from "./routers/music.router";
 
 const app = express();
 const port = 3001;
@@ -30,6 +31,7 @@ connectToDatabase()
     app.use(express.json({ limit: "50mb" }));
     app.use(HMAC(genSecret, { minInterval: 30 }));
     app.use("/users", usersRouter);
+    app.use("/music", musicRouter);
     app.use("/verify", verifyRouter);
     app.use("/games", gamesRouter);
 
