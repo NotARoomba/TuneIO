@@ -77,3 +77,17 @@ export interface LinkButtonProps {
   selected?: boolean;
 }
 
+export interface AlbumOptionProps {
+  title: string;
+  img: string;
+}
+
+export interface SpotifyImage {
+  
+}
+
+export interface Album  {
+  name: string;
+  images: 
+}
+

@@ -14,7 +14,7 @@ export default function Signup() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState([]);
     const [album, setAlbum] = useState("");
     const [alertModal, setAlertModal] = useState(false);
     const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
@@ -122,8 +122,8 @@ export default function Signup() {
             >
               Need to login?
             </Link>
-            <div className="flex flex-col">
-
+            <div className={"flex flex-col " + (search?"animate-show":"animate-hide")}>
+                {search}
             </div>
               {album &&<LinkButton disabled={loading} text="Submit" action={parseSignup} />}
             </div>
