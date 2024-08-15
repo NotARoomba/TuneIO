@@ -13,6 +13,8 @@ export default function Signup() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [album, setAlbum] = useState("");
+    const [search, setSearch] = useState("");
     const [alertModal, setAlertModal] = useState(false);
     const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
     const [loading, setLoading] = useState(false);
@@ -72,6 +74,21 @@ export default function Signup() {
       });
       setLoading(false);
     }, [navigate]);
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(async () => {
+            setLoading(true);
+          console.log(search)
+          const res = await callAPI("/music/search", "GET", {
+            query: search,
+            type: "album",
+          });
+          console.log(res)
+          setSearch(res.search);
+          setLoading(false);
+        }, 3000)
+    
+        return () => clearTimeout(delayDebounceFn)
+      }, [search])
     return <div className="flex flex-col w-screen h-[100dvh]">
       <Title text="Signup" reverse />
       <div className="text-2xl justify-center mx-auto flex flex-col">
@@ -87,6 +104,14 @@ export default function Signup() {
               value={email}
               onChange={(e) =>
                 setEmail(e.currentTarget.value.toLocaleLowerCase())
+              }
+              className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
+            />
+            <p className="mx-auto">Favorite Album</p>
+            <input
+              value={album}
+              onChange={(e) =>
+                setAlbum(e.currentTarget.value)
               }
               className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
             />
