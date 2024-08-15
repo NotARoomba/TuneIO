@@ -24,7 +24,7 @@ const refreshToken = () => {
     
         // Save the access token so that it's used in future calls
         spotifyApi.setAccessToken(data.body['access_token']);
-        setTimeout(() => refreshToken(), data.body['expires_in'])
+        setTimeout(() => refreshToken(), data.body['expires_in']*1000)
         },
         function(err) {
         console.log(
