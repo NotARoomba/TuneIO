@@ -77,9 +77,9 @@ export default function Signup() {
     useEffect(() => {
         const delayDebounceFn = setTimeout(async () => {
             setLoading(true);
-          console.log(search)
+          console.log(album)
           const res = await callAPI("/music/search", "GET", {
-            query: search,
+            query: album,
             type: "album",
           });
           console.log(res)
@@ -88,7 +88,7 @@ export default function Signup() {
         }, 3000)
     
         return () => clearTimeout(delayDebounceFn)
-      }, [search])
+      }, [album])
     return <div className="flex flex-col w-screen h-[100dvh]">
       <Title text="Signup" reverse />
       <div className="text-2xl justify-center mx-auto flex flex-col">
