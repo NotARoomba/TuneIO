@@ -13,8 +13,9 @@ export default function Signup() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [album, setAlbum] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     const [search, setSearch] = useState("");
+    const [album, setAlbum] = useState("");
     const [alertModal, setAlertModal] = useState(false);
     const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
     const [loading, setLoading] = useState(false);
@@ -77,9 +78,9 @@ export default function Signup() {
     useEffect(() => {
         const delayDebounceFn = setTimeout(async () => {
             setLoading(true);
-          console.log(album)
+          if (searchQuery.length == 0) return;
           const res = await callAPI("/music/search", "POST", {
-            query: album,
+            query: searchQuery,
             type: "album",
           });
           console.log(res)
@@ -88,7 +89,7 @@ export default function Signup() {
         }, 3000)
     
         return () => clearTimeout(delayDebounceFn)
-      }, [album])
+      }, [searchQuery])
     return <div className="flex flex-col w-screen h-[100dvh]">
       <Title text="Signup" reverse />
       <div className="text-2xl justify-center mx-auto flex flex-col">
@@ -109,19 +110,22 @@ export default function Signup() {
             />
             <p className="mx-auto">Favorite Album</p>
             <input
-              value={album}
+              value={searchQuery}
               onChange={(e) =>
-                setAlbum(e.currentTarget.value)
+                setSearchQuery(e.currentTarget.value)
               }
               className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
             />
             <Link
               to="/login"
-              className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto mb-2 "
+              className={"text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto mb-2 " + (searchQuery.length > 0?"animate-hide":"animate-show")}
             >
               Need to login?
             </Link>
-              <LinkButton disabled={loading} text="Submit" action={parseSignup} />
+            <div className="flex flex-col">
+
+            </div>
+              {album &&<LinkButton disabled={loading} text="Submit" action={parseSignup} />}
             </div>
             <div className="flex mx-auto mt-auto mb-20">
       <PageButton link="/" title="Home" color="bg-ash_gray"/>

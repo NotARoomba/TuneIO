@@ -44,7 +44,7 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     try {
       const search = await spotifyApi.search(data.query, [data.type], {limit: 5});
       if (search.statusCode == 200) {
-        res.status(200).send({ search, status: STATUS_CODES.SUCCESS });
+        res.status(200).send({ search: search.body[`${data.type}s`]?.items, status: STATUS_CODES.SUCCESS });
       } else {
         res.status(404).send({
           search: null,
