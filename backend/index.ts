@@ -29,7 +29,7 @@ connectToDatabase()
   .then(() => {
     app.use(cors(corsOptions));
     app.use(express.json({ limit: "50mb" }));
-    app.use(HMAC(genSecret));
+    // app.use(HMAC(genSecret));
     app.use("/users", usersRouter);
     app.use("/music", musicRouter);
     app.use("/verify", verifyRouter);
