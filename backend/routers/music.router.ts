@@ -39,7 +39,7 @@ refreshToken();
 musicRouter.use(express.json());
 
 musicRouter.get("/search", async (req: Request, res: Response) => {
-    console.log(req.body)
+    console.log(req)
     const data: Search = req.body;
     try {
       const search = await spotifyApi.search(data.query, [data.type], {limit: 5});
