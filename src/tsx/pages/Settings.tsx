@@ -16,6 +16,11 @@ export default function Settings() {
               <span className="w-10 h-5 bg-beige"></span>
               <span className="w-10 h-5 bg-beige"></span>
               <span className="w-10 h-5 bg-beige"></span>
+              <span className="w-10 h-5 bg-beige"></span>
+              <span className="w-10 h-5 bg-beige"></span>
+              <span className="w-10 h-5 bg-beige"></span>
+              <span className="w-10 h-5 bg-beige"></span>
+              <span className="w-10 h-5 bg-beige"></span>
               <input type="range" min="0" max="100" step="10" defaultValue="0"></input>
             </div>
           </div>
