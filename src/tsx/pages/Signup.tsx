@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PageButton from "../components/buttons/PageButton";
 import Title from "../components/misc/Title";
-import { callAPI, setCookie, checkIfLogin } from "../utils/Functions";
-import { STATUS_CODES } from "../utils/Types";
-import LinkButton from "../components/buttons/LinkButton";
+import { callAPI, setCookie, checkIfLogin, deleteCookies } from "../utils/Functions";
+import { Album, STATUS_CODES } from "../utils/Types";
+import ModalButton from "../components/buttons/ModalButton";
 import LoadingScreen from "../components/misc/LoadingScreen";
 import AlertModal from "../components/modals/AlertModal";
 import VerificationModal from "../components/modals/VerificationModal";
+import AlbumOption from "../components/misc/AlbumOption";
 
 export default function Signup() {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function Signup() {
     const [email, setEmail] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [search, setSearch] = useState([]);
-    const [album, setAlbum] = useState("");
+    const [album, setAlbum] = useState<Album | null>();
     const [alertModal, setAlertModal] = useState(false);
     const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
     const [loading, setLoading] = useState(false);
@@ -30,7 +31,6 @@ export default function Signup() {
         username,
         email,
       });
-      console.log(doesExist);
       if (doesExist.status !== STATUS_CODES.GENERIC_ERROR) {
         setLoading(false);
         if (doesExist.status === STATUS_CODES.EMAIL_IN_USE)
@@ -39,7 +39,7 @@ export default function Signup() {
           return setAlert("The username is already in use!");
         const res = await callAPI("/verify/send", "POST", {
           email,
-          service: "Makinator Verification",
+          service: "TuneIO Verification",
         });
         if (res.status === STATUS_CODES.INVALID_EMAIL)
           return setAlert("That email is invalid!");
@@ -58,11 +58,11 @@ export default function Signup() {
         username,
         email,
         dateJoined: Date.now(),
-        avatar: "",
+        avatar: album?.images[0].url,
       });
       if (res.status === STATUS_CODES.SUCCESS) {
-        localStorage.clear();
-        localStorage.setItem("userID", res.id);
+        deleteCookies();
+       setCookie("userID", res.id);
         return navigate("/");
       }
     };
@@ -78,7 +78,12 @@ export default function Signup() {
     useEffect(() => {
         const delayDebounceFn = setTimeout(async () => {
             setLoading(true);
-          if (searchQuery.length == 0) return;
+          if (searchQuery.length == 0 || album?.name == searchQuery) {
+            setLoading(false);
+            setSearch([])
+            return;
+          };
+          setAlbum(null);
           const res = await callAPI("/music/search", "POST", {
             query: searchQuery,
             type: "album",
@@ -86,7 +91,7 @@ export default function Signup() {
           console.log(res)
           setSearch(res.search);
           setLoading(false);
-        }, 3000)
+        }, 1000)
     
         return () => clearTimeout(delayDebounceFn)
       }, [searchQuery])
@@ -98,7 +103,7 @@ export default function Signup() {
               value={username}
               maxLength={24}
               onChange={(e) => setUsername(e.currentTarget.value)}
-              className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
+              className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
             />
             <p className="mx-auto">Email</p>
             <input
@@ -106,7 +111,7 @@ export default function Signup() {
               onChange={(e) =>
                 setEmail(e.currentTarget.value.toLocaleLowerCase())
               }
-              className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
+              className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
             />
             <p className="mx-auto">Favorite Album</p>
             <input
@@ -114,18 +119,18 @@ export default function Signup() {
               onChange={(e) =>
                 setSearchQuery(e.currentTarget.value)
               }
-              className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
+              className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
             />
-            <Link
+            {(search.length!==0 && searchQuery !== album?.name)? <p className="mx-auto animate-show">Search Results</p> : <Link
               to="/login"
-              className={"text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto mb-2 " + (searchQuery.length > 0?"animate-hide":"animate-show")}
+              className={"text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto mb-2 " + ((search.length!==0 && searchQuery == album?.name)?"animate-hide":"animate-show")}
             >
               Need to login?
-            </Link>
-            <div className={"flex flex-col " + (search?"animate-show":"animate-hide")}>
-                {search}
-            </div>
-              {album &&<LinkButton disabled={loading} text="Submit" action={parseSignup} />}
+            </Link>}
+            {!album &&<div className={"flex w-72 gap-2 my-2 flex-col " + (!album?"animate-show":"animate-hide")}>
+                {search.filter((v: Album) => v.images.length !== 0).map((v: Album, i) => <div key={i} onClick={() => {setAlbum(v); setSearchQuery(v.name)}} className=" cursor-pointer"><AlbumOption title={v.name} img={v.images[0].url} /></div>)}
+            </div>}
+              {album &&<ModalButton disabled={loading} text="Submit" action={parseSignup} />}
             </div>
             <div className="flex mx-auto mt-auto mb-20">
       <PageButton link="/" title="Home" color="bg-ash_gray"/>

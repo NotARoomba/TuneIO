@@ -16,8 +16,10 @@ export interface PlayButtonProps {
 }
 export interface PageButtonProps {
   title: string;
-  link: string;
+  link?: string;
   color?: string;
+  action?: () => void;
+  disabled?: boolean;
 }
 
 export enum STATUS_CODES {
@@ -69,7 +71,7 @@ export interface VerificationModalProps extends BaseModalProps {
   action: (v: boolean) => void;
 }
 
-export interface LinkButtonProps {
+export interface ModalButtonProps {
   text: string;
   route?: string;
   action?: () => void;
@@ -83,11 +85,13 @@ export interface AlbumOptionProps {
 }
 
 export interface SpotifyImage {
-  
+  width: number;
+  height: number;
+  url: string;
 }
 
 export interface Album  {
   name: string;
-  images: 
+  images: SpotifyImage[]
 }
 

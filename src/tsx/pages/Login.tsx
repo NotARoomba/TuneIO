@@ -4,7 +4,7 @@ import PageButton from "../components/buttons/PageButton";
 import Title from "../components/misc/Title";
 import { callAPI, setCookie, checkIfLogin } from "../utils/Functions";
 import { STATUS_CODES } from "../utils/Types";
-import LinkButton from "../components/buttons/LinkButton";
+import ModalButton from "../components/buttons/ModalButton";
 import LoadingScreen from "../components/misc/LoadingScreen";
 import AlertModal from "../components/modals/AlertModal";
 import VerificationModal from "../components/modals/VerificationModal";
@@ -84,7 +84,7 @@ export default function Login() {
               >
                 Need to sign up?
               </Link>
-              <LinkButton disabled={loading} text="Submit" action={parseLogin} />
+              <ModalButton disabled={loading} text="Submit" action={parseLogin} />
             </div>
             <div className="flex mx-auto mt-auto mb-20">
       <PageButton link="/" title="Home" color="bg-ash_gray"/>

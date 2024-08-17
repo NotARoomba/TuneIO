@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { LinkButtonProps } from "../../utils/Types";
+import { ModalButtonProps } from "../../utils/Types";
 
-export default function LinkButton({
+export default function ModalButton({
   route,
   action,
   text,
   disabled,
   selected,
-}: LinkButtonProps) {
+}: ModalButtonProps) {
   return route ? (
     <Link
       to={route}

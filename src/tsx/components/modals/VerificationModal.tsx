@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { callAPI } from "../../utils/Functions";
 import { useState } from "react";
 import AlertModal from "./AlertModal";
-import LinkButton from "../buttons/LinkButton";
+import ModalButton from "../buttons/ModalButton";
 import LoadingScreen from "../misc/LoadingScreen";
 
 export default function VerificationModal({
@@ -34,17 +34,17 @@ export default function VerificationModal({
       ariaHideApp={false}
       isOpen={isOpen}
       className={
-        " w-4/12 p-10 rounded-xl h-1/3 min-h-80 min-w-96 bg-background text-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " +
+        " w-4/12 p-10 rounded-xl h-1/3 min-h-80 min-w-96 bg-rich_black text-beige absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 outline-2 outline outline-air_force_blue-200 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "bg-text-800/80 absolute w-full h-full top-0 left-0 " +
+        "bg-rich_black/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}
     >
       <div className="w-full h-full flex flex-col text-center justify-around">
-        <p className="text-5xl font-bold mt-2">Verification</p>
+        <p className="text-4xl font-bold mt-2">Verification</p>
         <p className="text-xl  mt-2">
           Enter the verification code that was sent to{" "}
           <p className="font-bold">{email}</p>
@@ -62,8 +62,8 @@ export default function VerificationModal({
           Resend code
         </p>
         <div className="flex gap-2 mx-auto justify-center">
-          <LinkButton text="Cancel" action={() => setIsOpen(false)} />
-          <LinkButton text="Submit" action={verifyCode} />
+          <ModalButton text="Cancel" action={() => setIsOpen(false)} />
+          <ModalButton text="Submit" action={verifyCode} />
         </div>
       </div>
       <LoadingScreen loading={loading} />

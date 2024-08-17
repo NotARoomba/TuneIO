@@ -29,19 +29,27 @@ export default function Profile() {
     }
   }, [navigate, editModal]);
   const logout = () => {
-    localStorage.clear();
     deleteCookies();
     navigate("/");
   };
   return(
-    <div className="flex flex-col w-screen overflow-hidden">
+    <div className="flex flex-col w-screen h-[100dvh] overflow-hidden font-medium ">
       <Title text="Profile" reverse />
-      <div className="flex flex-col mx-auto gap-5 w-11/12 mt-20">
-        <img src=""/>
-      </div>
+        <img className="w-2/3 mx-auto aspect-square outline outline-8 outline-beige rounded mt-2 mb-8" src={user?.avatar}/>
+        <p className="text-5xl mx-auto ">{user?.username}</p>
+        <p className="text-xl mx-auto my-2 ">Date Joined: {(() => {
+                const d = new Date(user?.dateJoined ?? 0);
+                return (
+                  [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/")
+                );
+              })()}</p>
 
+<div className=" gap-y-3 w-11/12 mx-auto">
+<PageButton link="/" title="Home" color="bg-ash_gray"/>
+<PageButton action={() => setEditModal(true)} title="Edit Profile" color="bg-air_force_blue"/>
+<PageButton  action={() => setLogoutModal(true)} title="Logout" color="bg-midnight_green"/>
 
-      
+</div>
       <LoadingScreen loading={loading} />
       <EditModal setIsOpen={setEditModal} isOpen={editModal} />
       <AlertModal
