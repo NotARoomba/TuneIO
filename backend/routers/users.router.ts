@@ -47,10 +47,9 @@ usersRouter.post("/update", async (req: Request, res: Response) => {
     if (collections.users) {
       if (data._id) {
         id = new ObjectId(data._id);
-        const { email, username, avatar } = data;
         await collections.users.updateOne(
           { _id: id },
-          { $set: { email, username, avatar } },
+          { $set: data },
         );
       } else {
         const res = await collections.users.updateOne(
