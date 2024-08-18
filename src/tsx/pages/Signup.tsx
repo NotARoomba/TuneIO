@@ -89,6 +89,10 @@ export default function Signup() {
             type: "album",
           });
           console.log(res)
+          if (res.status !== STATUS_CODES.SUCCESS) {
+            setLoading(false)
+            return setAlert("There was an error fetching the albums!")
+          }
           setSearch(res.search);
           setLoading(false);
         }, 1000)
@@ -127,7 +131,7 @@ export default function Signup() {
             >
               Need to login?
             </Link>}
-            {!album &&<div className={"flex w-72 gap-2 my-2 flex-col " + (!album?"animate-show":"animate-hide")}>
+            {!album &&<div className={"flex w-72 gap-2 my-2 flex-col max-h-24 overflow-scroll min-w-72 mx-auto " + (!album?"animate-show":"animate-hide")}>
                 {search.filter((v: Album) => v.images.length !== 0).map((v: Album, i) => <div key={i} onClick={() => {setAlbum(v); setSearchQuery(v.name)}} className=" cursor-pointer"><AlbumOption title={v.name} img={v.images[0].url} /></div>)}
             </div>}
               {album &&<ModalButton disabled={loading} text="Submit" action={parseSignup} />}
