@@ -8,6 +8,7 @@ export default {
       sans: "IBM Plex Mono",
     },
     screens: {
+      "3xs": "380px",
       "2xs": "475px",
       xs: "600px",
       ...defaultTheme.screens,

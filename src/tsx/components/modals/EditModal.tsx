@@ -1,11 +1,10 @@
 import Modal from "react-modal";
-import { Album, BaseModalProps, STATUS_CODES } from "../../utils/Types";
+import { Album, BaseModalProps, STATUS_CODES, User } from "../../utils/Types";
 import AlertModal from "./AlertModal";
-import { ChangeEvent, createRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { callAPI, checkIfLogin, convertToBase64 } from "../../utils/Functions";
+import { callAPI, checkIfLogin } from "../../utils/Functions";
 import VerificationModal from "./VerificationModal";
-import { Edit2, User } from "react-feather";
 import ModalButton from "../buttons/ModalButton";
 import LoadingScreen from "../misc/LoadingScreen";
 import AlbumOption from "../misc/AlbumOption";
@@ -24,7 +23,6 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState<string[]>(["", ""]);
   const [verification, setVerification] = useState(false);
-  const inputRef = createRef<HTMLInputElement>();
   const setAlert = (msg: string, title?: string) => {
     title ? setAlertMsg([title, msg]) : setAlertMsg(["Error", msg]);
     setAlertModal(true);
@@ -71,7 +69,6 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
         query: searchQuery,
         type: "album",
       });
-      console.log(res)
       setSearch(res.search);
       setLoading(false);
     }, 1000)
@@ -93,12 +90,12 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
       closeTimeoutMS={300}
     >
       <div className="w-full h-full flex flex-col text-center ">
-        <p className="text-5xl font-bold mb-4">Edit Profile</p>
+        <p className="text-4xl 3xs:text-5xl font-bold mb-3">Edit Profile</p>
         <img
               src={album?.images[0].url ?? avatar}
               className="rounded-xl max-w-fit mx-auto max-h-32 h-fit group"
             />
-        <div className="mx-auto mt-4">
+        <div className="mx-auto mt-3">
           <p className="text-2xl font-bold ">Username</p>
           <input
             value={username}
@@ -119,7 +116,8 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
               }
               className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
             />
-           {!album &&<div className={"flex w-72 gap-2 my-2 flex-col " + (!album?"animate-show":"animate-hide")}>
+             <p className="text-2xl font-bold ">Search Results</p>
+           {!album &&<div className={"flex w-72 gap-2 my-2 flex-col max-h-20 overflow-scroll " + (!album?"animate-show":"animate-hide")}>
                 {search.filter((v: Album) => v.images.length !== 0).map((v: Album, i) => <div key={i} onClick={() => {setAlbum(v); setSearchQuery(v.name)}} className=" cursor-pointer"><AlbumOption title={v.name} img={v.images[0].url} /></div>)}
             </div>}
         </div>

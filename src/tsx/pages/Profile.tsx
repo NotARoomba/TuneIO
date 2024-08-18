@@ -1,10 +1,9 @@
 import PageButton from "../components/buttons/PageButton";
-import HomeButton from "../components/buttons/HomeButton";
 import Title from "../components/misc/Title";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkIfLogin, callAPI, deleteCookies } from "../utils/Functions";
-import { User, STATUS_CODES } from "../utils/Types";
+import { checkIfLogin, deleteCookies } from "../utils/Functions";
+import { User } from "../utils/Types";
 import LoadingScreen from "../components/misc/LoadingScreen";
 import EditModal from "../components/modals/EditModal";
 import AlertModal from "../components/modals/AlertModal";
@@ -33,9 +32,10 @@ export default function Profile() {
     navigate("/");
   };
   return(
-    <div className="flex flex-col w-screen h-[100dvh] overflow-hidden font-medium ">
+    <div className="flex flex-col w-screen h-[100dvh] font-medium ">
       <Title text="Profile" reverse />
-        <img className="w-2/3 mx-auto aspect-square outline outline-8 outline-beige rounded mt-2 mb-8" src={user?.avatar}/>
+        <img className="w-1/2 3xs:w-2/3 mx-auto aspect-square outline outline-8 outline-beige rounded mt-2 mb-8" src={user?.avatar}></img>
+        <p className="text-6xl mx-auto">{user?.album.name}</p>
         <p className="text-5xl mx-auto ">{user?.username}</p>
         <p className="text-xl mx-auto my-2 ">Date Joined: {(() => {
                 const d = new Date(user?.dateJoined ?? 0);
