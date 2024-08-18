@@ -47,9 +47,10 @@ usersRouter.post("/update", async (req: Request, res: Response) => {
     if (collections.users) {
       if (data._id) {
         id = new ObjectId(data._id);
+        const {_id, ...updateData} = data;
         await collections.users.updateOne(
           { _id: id },
-          { $set: data },
+          { $set: updateData },
         );
       } else {
         const res = await collections.users.updateOne(
