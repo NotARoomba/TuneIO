@@ -51,13 +51,13 @@ const refreshDaily = async () => {
     limit: 25,
   }));
   if (trackRes.body.tracks) {
-    dailySong.info = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
-    YTSR.search(`${dailySong.info.name} - ${dailySong.info.artists[0].name}`, {type: "video", limit: 25}).then(search => {
-      search.filter((v) => isGoodMusicVideoContent(v, dailySong.info));
+    const info = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
+    YTSR.search(`${info.name} - ${info.artists[0].name}`, {type: "video", limit: 25}).then(search => {
+      search.filter((v) => isGoodMusicVideoContent(v, info));
       if (!search[0].id) return refreshDaily();
-      dailySong.id = search[0].id
+      dailySong = {id: search[0].id, info}
   })
-    console.log(`Refreshed Daily Song! Song: ${dailySong.info.name} - ${dailySong.info.artists[0].name}`)
+    console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
   } else {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`)
   }
