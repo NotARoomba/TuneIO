@@ -5,7 +5,7 @@ import { Song, GENRES, Search } from "../models/music";
 import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 
 export const musicRouter = express.Router();
 

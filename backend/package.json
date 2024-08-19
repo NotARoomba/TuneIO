@@ -23,8 +23,7 @@
     "nodemailer": "^6.9.8",
     "spotify-web-api-node": "^5.0.2",
     "ts-dotenv": "^0.9.1",
-    "youtube-sr": "^4.3.11",
-    "ytdl-core": "^4.11.5"
+    "youtube-sr": "^4.3.11"
   },
   "engines": {
     "node": ">=18"
