@@ -10,7 +10,7 @@ import AlertModal from "../components/modals/AlertModal";
 import VerificationModal from "../components/modals/VerificationModal";
 
 export default function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
@@ -60,48 +60,49 @@ export default function Login() {
       setLoading(false);
     });
   }, [navigate]);
-    return <div className="flex flex-col w-screen h-[100dvh]">
+  return (
+    <div className="flex flex-col w-screen h-[100dvh]">
       <Title text="Login" reverse />
       <div className="text-2xl justify-center mx-auto flex flex-col">
-              <p className="text-center">Email</p>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  parseLogin();
-                }}
-              >
-                <input
-                  value={email}
-                  onChange={(e) =>
-                    setEmail(e.currentTarget.value.toLocaleLowerCase())
-                  }
-                  className="mx-auto my-2 bg-transparent text-center outline rounded outline-beige"
-                />
-              </form>
-              <Link
-                to="/signup"
-                className="text-air_force_blue text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto mb-2 "
-              >
-                Need to sign up?
-              </Link>
-              <ModalButton disabled={loading} text="Submit" action={parseLogin} />
-            </div>
-            <div className="flex mx-auto mt-auto mb-20">
-      <PageButton link="/" title="Home" color="bg-ash_gray"/>
-
-            </div>
-            <LoadingScreen loading={loading} />
-          <VerificationModal
-            setIsOpen={setVerification}
-            isOpen={verification}
-            email={email}
-            action={checkLogin}
+        <p className="text-center">Email</p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            parseLogin();
+          }}
+        >
+          <input
+            value={email}
+            onChange={(e) =>
+              setEmail(e.currentTarget.value.toLocaleLowerCase())
+            }
+            className="mx-auto my-2 bg-transparent text-center outline rounded outline-beige"
           />
-          <AlertModal
-            title={alertMsg[0]}
-            text={alertMsg[1]}
-            isOpen={alertModal}
-            setIsOpen={setAlertModal}
-          />
-  </div>
+        </form>
+        <Link
+          to="/signup"
+          className="text-air_force_blue text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto mb-2 "
+        >
+          Need to sign up?
+        </Link>
+        <ModalButton disabled={loading} text="Submit" action={parseLogin} />
+      </div>
+      <div className="flex mx-auto mt-auto mb-20">
+        <PageButton link="/" title="Home" color="bg-ash_gray" />
+      </div>
+      <LoadingScreen loading={loading} />
+      <VerificationModal
+        setIsOpen={setVerification}
+        isOpen={verification}
+        email={email}
+        action={checkLogin}
+      />
+      <AlertModal
+        title={alertMsg[0]}
+        text={alertMsg[1]}
+        isOpen={alertModal}
+        setIsOpen={setAlertModal}
+      />
+    </div>
+  );
 }

@@ -26,8 +26,8 @@ export default function LoadingScreen({
         />
         {loading && (
           <div className="flex -mt-10">
-          <Title text="TuneIO" />
-            </div>
+            <Title text="TuneIO" />
+          </div>
         )}
         {text && loading && (
           <p className="mx-auto text-center text-2xl font-bold mb-2">

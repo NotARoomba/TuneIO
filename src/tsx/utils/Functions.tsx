@@ -79,15 +79,18 @@ export function convertToBase64(file: Blob) {
 }
 
 export function setCookie(key: string, value: string | null) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = key + "=" + value + ";expires=" + expires.toUTCString();
-  }
-  export function deleteCookies() {
-    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
-  }
-  export function getCookie(key: string) {
-    const keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
-    return keyValue ? keyValue[2] : null;
-  }
-  
+  const expires = new Date();
+  expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000);
+  document.cookie = key + "=" + value + ";expires=" + expires.toUTCString();
+}
+export function deleteCookies() {
+  document.cookie.split(";").forEach(function (c) {
+    document.cookie = c
+      .replace(/^ +/, "")
+      .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+  });
+}
+export function getCookie(key: string) {
+  const keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
+  return keyValue ? keyValue[2] : null;
+}

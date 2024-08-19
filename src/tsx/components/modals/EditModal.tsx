@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { Album, BaseModalProps, STATUS_CODES, User } from "../../utils/Types";
+import { Album, BaseModalProps, STATUS_CODES } from "../../utils/Types";
 import AlertModal from "./AlertModal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
     setLoading(true);
     checkIfLogin().then((user) => {
       if (!user) {
-        return navigate("/login")
+        return navigate("/login");
       }
       setUserID(user._id);
       setAvatar(user.avatar);
@@ -58,12 +58,12 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
   };
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-        setLoading(true);
+      setLoading(true);
       if (searchQuery.length == 0 || album?.name == searchQuery) {
         setLoading(false);
-        setSearch([])
+        setSearch([]);
         return;
-      };
+      }
       setAlbum(null);
       const res = await callAPI("/music/search", "POST", {
         query: searchQuery,
@@ -71,10 +71,10 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
       });
       setSearch(res.search);
       setLoading(false);
-    }, 1000)
+    }, 1000);
 
-    return () => clearTimeout(delayDebounceFn)
-  }, [searchQuery])
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
   return (
     <Modal
       ariaHideApp={false}
@@ -92,9 +92,9 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
       <div className="w-full h-full flex flex-col text-center ">
         <p className="text-4xl 3xs:text-5xl font-bold mb-3">Edit Profile</p>
         <img
-              src={album?.images[0].url ?? avatar}
-              className="rounded-xl max-w-fit mx-auto max-h-32 h-fit group"
-            />
+          src={album?.images[0].url ?? avatar}
+          className="rounded-xl max-w-fit mx-auto max-h-32 h-fit group"
+        />
         <div className="mx-auto mt-3">
           <p className="text-2xl font-bold ">Username</p>
           <input
@@ -109,17 +109,35 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
             className="mx-auto my-2  bg-transparent text-center outline rounded outline-primary"
           />
           <p className="text-2xl font-bold ">Favorite Album</p>
-            <input
-              value={searchQuery}
-              onChange={(e) =>
-                setSearchQuery(e.currentTarget.value)
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+            className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
+          />
+          <p className="text-2xl font-bold ">Search Results</p>
+          {!album && (
+            <div
+              className={
+                "flex w-72 gap-2 my-2 flex-col max-h-20 overflow-scroll " +
+                (!album ? "animate-show" : "animate-hide")
               }
-              className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
-            />
-             <p className="text-2xl font-bold ">Search Results</p>
-           {!album &&<div className={"flex w-72 gap-2 my-2 flex-col max-h-20 overflow-scroll " + (!album?"animate-show":"animate-hide")}>
-                {search.filter((v: Album) => v.images.length !== 0).map((v: Album, i) => <div key={i} onClick={() => {setAlbum(v); setSearchQuery(v.name)}} className=" cursor-pointer"><AlbumOption title={v.name} img={v.images[0].url} /></div>)}
-            </div>}
+            >
+              {search
+                .filter((v: Album) => v.images.length !== 0)
+                .map((v: Album, i) => (
+                  <div
+                    key={i}
+                    onClick={() => {
+                      setAlbum(v);
+                      setSearchQuery(v.name);
+                    }}
+                    className=" cursor-pointer"
+                  >
+                    <AlbumOption title={v.name} img={v.images[0].url} />
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
         <div className="flex gap-2 mx-auto justify-center mt-4">
           <ModalButton text="Cancel" action={() => setIsOpen(false)} />

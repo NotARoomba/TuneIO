@@ -1,5 +1,11 @@
-type SearchType = "album" | "artist" | "playlist" | "track" | "show" | "episode";
+type SearchType =
+  | "album"
+  | "artist"
+  | "playlist"
+  | "track"
+  | "show"
+  | "episode";
 export interface Search {
-    type: SearchType,
-    query: string
+  type: SearchType;
+  query: string;
 }

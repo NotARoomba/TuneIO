@@ -9,7 +9,7 @@ import EditModal from "../components/modals/EditModal";
 import AlertModal from "../components/modals/AlertModal";
 
 export default function Profile() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User>();
   const [editModal, setEditModal] = useState(false);
@@ -31,25 +31,38 @@ export default function Profile() {
     deleteCookies();
     navigate("/");
   };
-  return(
+  return (
     <div className="flex flex-col w-screen h-[100dvh] font-medium ">
       <Title text="Profile" reverse />
-        <img className="w-1/2 3xs:w-2/3 mx-auto aspect-square outline outline-8 outline-beige rounded mt-2 mb-8" src={user?.avatar}></img>
-        {/* <p className="text-6xl mx-auto">{user?.album.name}</p> */}
-        <p className="text-5xl mx-auto ">{user?.username}</p>
-        <p className="text-xl mx-auto my-2 ">Date Joined: {(() => {
-                const d = new Date(user?.dateJoined ?? 0);
-                return (
-                  [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/")
-                );
-              })()}</p>
+      <img
+        className="w-1/2 3xs:w-2/3 mx-auto aspect-square outline outline-8 outline-beige rounded mt-2 mb-8"
+        src={user?.avatar}
+      ></img>
+      <p className=" text-sm mx-auto -mt-6">
+        {user?.album.name} - {user?.album.artists[0].name}
+      </p>
+      <p className="text-5xl mx-auto ">{user?.username}</p>
+      <p className="text-xl mx-auto my-2 ">
+        Date Joined:{" "}
+        {(() => {
+          const d = new Date(user?.dateJoined ?? 0);
+          return [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/");
+        })()}
+      </p>
 
-<div className=" gap-y-3 w-11/12 mx-auto">
-<PageButton link="/" title="Home" color="bg-ash_gray"/>
-<PageButton action={() => setEditModal(true)} title="Edit Profile" color="bg-air_force_blue"/>
-<PageButton  action={() => setLogoutModal(true)} title="Logout" color="bg-midnight_green"/>
-
-</div>
+      <div className=" gap-y-3 w-11/12 mx-auto">
+        <PageButton link="/" title="Home" color="bg-ash_gray" />
+        <PageButton
+          action={() => setEditModal(true)}
+          title="Edit Profile"
+          color="bg-air_force_blue"
+        />
+        <PageButton
+          action={() => setLogoutModal(true)}
+          title="Logout"
+          color="bg-midnight_green"
+        />
+      </div>
       <LoadingScreen loading={loading} />
       <EditModal setIsOpen={setEditModal} isOpen={editModal} />
       <AlertModal
@@ -67,5 +80,5 @@ export default function Profile() {
         setIsOpen={setLogoutModal}
       />
     </div>
-  )
+  );
 }

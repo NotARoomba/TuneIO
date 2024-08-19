@@ -31,11 +31,13 @@ const router = createBrowserRouter([
         path: "/settings",
         element: <Settings />,
         errorElement: <Error />,
-      },{
+      },
+      {
         path: "/login",
         element: <Login />,
         errorElement: <Error />,
-      },{
+      },
+      {
         path: "/signup",
         element: <Signup />,
         errorElement: <Error />,
@@ -44,7 +46,7 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <Profile />,
         errorElement: <Error />,
-      }
+      },
     ],
   },
 ]);

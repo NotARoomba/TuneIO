@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import { PageButtonProps } from "../../utils/Types";
 
-export default function PageButton({ title, link, color, disabled, action }: PageButtonProps) {
+export default function PageButton({
+  title,
+  link,
+  color,
+  disabled,
+  action,
+}: PageButtonProps) {
   const colors = [
     "bg-midnight_green",
     "bg-air_force_blue",
@@ -11,8 +17,8 @@ export default function PageButton({ title, link, color, disabled, action }: Pag
   ];
   const bg = color ?? colors[Math.floor(Math.random() * colors.length)];
   const isDark = colors.indexOf(bg) < 3;
-  return (
-    link ? <Link
+  return link ? (
+    <Link
       to={link}
       className={
         "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 my-3 " +
@@ -23,13 +29,17 @@ export default function PageButton({ title, link, color, disabled, action }: Pag
       }
     >
       {title}
-    </Link> :  <button
+    </Link>
+  ) : (
+    <button
       disabled={disabled}
       onClick={action}
       className={
-        "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 my-3 " + (isDark
+        "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 my-3 " +
+        (isDark
           ? "text-beige hover:brightness-125 "
-          : "text-rich_black hover:brightness-75 ") + bg
+          : "text-rich_black hover:brightness-75 ") +
+        bg
       }
     >
       {title}

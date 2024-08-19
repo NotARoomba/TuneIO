@@ -41,12 +41,12 @@ export enum STATUS_CODES {
 }
 
 export interface User {
-    _id: string,
-    avatar: string,
-    username: string,
-    email: string,
-    album: Album;
-    dateJoined: Date,
+  _id: string;
+  avatar: string;
+  username: string;
+  email: string;
+  album: Album;
+  dateJoined: Date;
 }
 
 export interface LoadingScreenProps {
@@ -91,8 +91,12 @@ export interface SpotifyImage {
   url: string;
 }
 
-export interface Album  {
+export interface SpotifyArtists {
   name: string;
-  images: SpotifyImage[]
 }
 
+export interface Album {
+  name: string;
+  artists: SpotifyArtists[];
+  images: SpotifyImage[];
+}

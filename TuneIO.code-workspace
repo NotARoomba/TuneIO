@@ -1,17 +1,17 @@
 {
   "folders": [
     {
-      "path": "."
+      "path": ".",
     },
     {
-      "path": "../Makinator"
+      "path": "../Makinator",
     },
     {
-      "path": "../ForoPEC/web"
+      "path": "../ForoPEC/web",
     },
     {
-      "path": "../NotARoomba-Backend"
-    }
+      "path": "../NotARoomba-Backend",
+    },
   ],
   "settings": {},
 }
