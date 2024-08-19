@@ -29,6 +29,6 @@ export const GENRES = [
 ]
 
 export interface Song {
-  url: string;
+  stream: Stream;
   info: SpotifyApi.TrackObjectFull;
 }
