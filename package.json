@@ -22,7 +22,9 @@
     "react-loader-spinner": "^6.1.6",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.1",
-    "youtube-sr": "^4.3.11"
+    "react-youtube": "^10.1.0",
+    "youtube-sr": "^4.3.11",
+    "ytsr": "^3.8.4"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

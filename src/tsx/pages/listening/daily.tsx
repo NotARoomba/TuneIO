@@ -3,7 +3,7 @@ import Title from "../../components/misc/Title";
 import { callAPI, isGoodMusicVideoContent } from "../../utils/Functions";
 import { STATUS_CODES, SpotifyTrack } from "../../utils/Types";
 import AlertModal from "../../components/modals/AlertModal";
-import YTSR from "youtube-sr";
+import YTSR from "ytsr";
 
 export default function Daily() {
     const [song, setSong] = useState<SpotifyTrack>();
@@ -14,10 +14,11 @@ export default function Daily() {
             if (res.status == STATUS_CODES.SUCCESS) {
                 console.log(res)
                 setSong(res.song);
-                YTSR.search(res.song.name, {type: "video", limit: 25}).then(search => {
-                    search.filter((v) => isGoodMusicVideoContent(v, res.song));
-                    console.log(search[0]);
-                    setYTURL(search[0].url);
+                YTSR(res.song.name, {limit: 25}).then(search => {
+                    console.log(search)
+                    // search.filter((v) => isGoodMusicVideoContent(v, res.song));
+                    // console.log(search[0]);
+                    // setYTURL(search[0].url);
                 })
             } else {
                 setAlertModal(true);    

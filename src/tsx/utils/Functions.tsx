@@ -95,8 +95,3 @@ export function getCookie(key: string) {
   const keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
   return keyValue ? keyValue[2] : null;
 }
-
-export function isGoodMusicVideoContent(result: Video, song: SpotifyTrack) {
-  const contains = (string: any, content: string) => !!~(string || "").indexOf(content);
-  return ((result.music[0].title.toLowerCase() == song.name.toLowerCase() && result.music[0].artist.toLowerCase() == song.artists[0].name.toLowerCase()) || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
-}

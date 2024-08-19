@@ -4,6 +4,7 @@ import { load } from "ts-dotenv";
 import { GENRES, Search } from "../models/music";
 import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
+import YTSR, { Video } from "youtube-sr";
 
 export const musicRouter = express.Router();
 
@@ -38,6 +39,10 @@ const refreshToken = () => {
   );
 };
 refreshToken();
+export function isGoodMusicVideoContent(result: Video, song: SpotifyApi.TrackObjectFull) {
+  const contains = (string: any, content: string) => !!~(string || "").indexOf(content);
+  return ((result.music[0].title.toLowerCase() == song.name.toLowerCase() && result.music[0].artist.toLowerCase() == song.artists[0].name.toLowerCase()) || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
+}
 const refreshDaily = async () => {
   const artists = await spotifyApi.search(GENRES[Math.floor(Math.random() * GENRES.length)], ["artist"], {
     limit: 25,
@@ -47,6 +52,12 @@ const refreshDaily = async () => {
   }));
   if (trackRes.body.tracks) {
     dailySong = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
+    YTSR.search(dailySong.name, {type: "video", limit: 25}).then(search => {
+      console.log(search)
+      search.filter((v) => isGoodMusicVideoContent(v, dailySong));
+      console.log(search[0]);
+      // setYTURL(search[0].url);
+  })
     console.log(`Refreshed Daily Song! Song: ${dailySong.name} - ${dailySong.artists[0].name}`)
   } else {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`)
