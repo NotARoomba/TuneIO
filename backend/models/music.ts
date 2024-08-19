@@ -23,6 +23,5 @@ export const GENRES = [
   "R&B",
   "Folk",
   "World",
-  "Reggae",
   "Classical",
 ]
