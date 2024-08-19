@@ -53,6 +53,7 @@ const refreshDaily = async () => {
   if (trackRes.body.tracks) {
     dailySong = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
     YTSR.search(`${dailySong.name} - ${dailySong.artists[0].name}`, {type: "video", limit: 25}).then(search => {
+      console.log(search[0]);
       search.filter((v) => isGoodMusicVideoContent(v, dailySong));
       console.log(search[0]);
   })
