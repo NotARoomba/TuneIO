@@ -6,6 +6,7 @@ import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
 import ytdl from "@distube/ytdl-core";
+import { Stream } from "node:stream";
 
 export const musicRouter = express.Router();
 
@@ -40,6 +41,18 @@ const refreshToken = () => {
   );
 };
 refreshToken();
+async function stream2buffer(stream: Stream): Promise<Buffer> {
+
+  return new Promise < Buffer > ((resolve, reject) => {
+      
+      const _buf = Array < any > ();
+
+      stream.on("data", chunk => _buf.push(chunk));
+      stream.on("end", () => resolve(Buffer.concat(_buf)));
+      stream.on("error", err => reject(`error converting stream - ${err}`));
+
+  });
+} 
 export function isGoodMusicVideoContent(result: Video, song: SpotifyApi.TrackObjectFull) {
   const contains = (string: any, content: string) => !!~(string || "").indexOf(content);
   return (result.music ? (result.music[0].title.toLowerCase() == song.name.toLowerCase() && result.music[0].artist.toLowerCase() == song.artists[0].name.toLowerCase()) : false || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
@@ -65,12 +78,9 @@ const refreshDaily = async () => {
 					}
 				}
 			})
-      const chunks: any = [];
-      stream.on('data', d => chunks.push(d));
-      stream.on('end', () => {
-        dailySong = {stream: Buffer.concat(chunks), info}
+      const buffer = await stream2buffer(stream)
+        dailySong = {stream: buffer, info}
         console.log('Buffer Recieved!')
-      })      
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
   } else {
