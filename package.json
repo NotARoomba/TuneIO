@@ -21,7 +21,8 @@
     "react-feather": "^2.0.10",
     "react-loader-spinner": "^6.1.6",
     "react-modal": "^3.16.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "youtube-sr": "^4.3.11"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

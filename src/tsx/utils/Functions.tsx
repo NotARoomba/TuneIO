@@ -1,5 +1,6 @@
 import Crypto from "crypto-js";
-import { STATUS_CODES, User } from "./Types";
+import { STATUS_CODES, SpotifyTrack, User } from "./Types";
+import YTSR, {Video} from "youtube-sr";
 
 const API_URL = "https://tuneio-api.notaroomba.dev";
 
@@ -44,9 +45,9 @@ export async function callAPI(
   } catch (error: any) {
     console.log(error);
     if (!error.response) {
-      alert(
-        "We couldn't connect to the server! Please check your internet connection.",
-      );
+      // alert(
+      //   "We couldn't connect to the server! Please check your internet connection.",
+      // );
       return { status: STATUS_CODES.NO_CONNECTION };
     }
     return {
@@ -93,4 +94,9 @@ export function deleteCookies() {
 export function getCookie(key: string) {
   const keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
   return keyValue ? keyValue[2] : null;
+}
+
+export function isGoodMusicVideoContent(result: Video, song: SpotifyTrack) {
+  const contains = (string: any, content: string) => !!~(string || "").indexOf(content);
+  return ((result.music[0].title.toLowerCase() == song.name.toLowerCase() && result.music[0].artist.toLowerCase() == song.artists[0].name.toLowerCase()) || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
 }

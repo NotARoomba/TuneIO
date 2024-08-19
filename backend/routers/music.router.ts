@@ -86,7 +86,7 @@ musicRouter.get("/daily", async (req: Request, res: Response) => {
     res
         .status(200)
         .send({
-          track: dailySong,
+          song: dailySong,
           status: STATUS_CODES.SUCCESS,
         });
   } catch (error) {

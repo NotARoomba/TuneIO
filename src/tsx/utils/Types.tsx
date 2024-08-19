@@ -95,6 +95,12 @@ export interface SpotifyArtists {
   name: string;
 }
 
+export interface SpotifyTrack {
+  name: string;
+  genre: string;
+  artists: SpotifyArtists[];
+}
+
 export interface Album {
   name: string;
   artists: SpotifyArtists[];

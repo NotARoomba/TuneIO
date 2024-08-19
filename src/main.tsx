@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         errorElement: <Error />,
       },
       {
-        path: "/play/daily",
+        path: "/listen/daily",
         element: <Daily />,
         errorElement: <Error />,
       },
