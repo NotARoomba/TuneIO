@@ -53,20 +53,13 @@ const refreshDaily = async () => {
   }));
   if (trackRes.body.tracks) {
     const info = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
-    YTSR.search(`${info.name} - ${info.artists[0].name}`, {type: "video", limit: 25}).then(search => {
+    YTSR.search(`${info.name} - ${info.artists[0].name}`, {type: "video", limit: 25}).then(async search => {
       search.filter((v) => isGoodMusicVideoContent(v, info));
       if (!search[0].id) return refreshDaily();
-      const stream = ytdl(search[0].url, {
-				filter: "audioonly",
-        highWaterMark: 1 << 25,
-				requestOptions: {
-					headers: {
-						Cookie: process.env.YT_COOKIE,
-					}
-				}
-			})
-      console.log(stream)
-      dailySong = {stream, info}
+      let ytInfo = await ytdl.getInfo(search[0].url);
+	    let audioFormat = ytdl.chooseFormat(ytInfo.formats, { quality: 'highestaudio', filter: 'audioonly' });
+      console.log(audioFormat.url)
+      dailySong = {url: audioFormat.url, info}
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
   } else {
