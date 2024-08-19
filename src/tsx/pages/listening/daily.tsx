@@ -15,7 +15,7 @@ export default function Daily() {
             if (res.status == STATUS_CODES.SUCCESS) {
                 console.log(res)
                 setSong(res.song);
-                const blob = new Blob(res.song.stream, { type: "audio/mp3" });
+                const blob = new Blob([res.song.stream.data], {type: "audio/mp3"});
                 setURL(URL.createObjectURL(blob));
                  console.log(URL.createObjectURL(blob))
             } else {

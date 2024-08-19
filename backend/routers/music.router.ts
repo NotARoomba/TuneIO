@@ -49,7 +49,7 @@ async function stream2buffer(stream: Stream): Promise<Buffer> {
 
       stream.on("data", chunk => _buf.push(chunk));
       stream.on("end", () => resolve(Buffer.concat(_buf)));
-      stream.on("error", err => reject(`error converting stream - ${err}`));
+      stream.on("error", err => reject(`Error converting stream - ${err}`));
 
   });
 } 

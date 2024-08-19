@@ -107,7 +107,12 @@ export interface Album {
   images: SpotifyImage[];
 }
 
+export interface Buffer {
+  data: ArrayBuffer;
+  type: string;
+}
+
 export interface Song {
-  stream: BufferSource[];
+  stream: Buffer;
   info: SpotifyTrack;
 }
