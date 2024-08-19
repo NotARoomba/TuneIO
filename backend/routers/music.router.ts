@@ -114,7 +114,6 @@ musicRouter.get("/daily", async (req: Request, res: Response) => {
           song: dailySong,
           status: STATUS_CODES.SUCCESS,
         });
-      dailySong.stream.pipe(res);
   } catch (error) {
     console.log(error);
     res.status(404).send({ status: STATUS_CODES.GENERIC_ERROR });
