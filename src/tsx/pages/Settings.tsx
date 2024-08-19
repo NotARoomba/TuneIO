@@ -52,6 +52,7 @@ export default function Settings() {
         >
           {difficulties.map((v, i) => (
             <div
+              onClick={(e) => e.currentTarget.scrollIntoView({behavior: "smooth"})}
               className={
                 "mx-auto snap-center  leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-56 min-w-56 " +
                 ["bg-ash_gray", "bg-air_force_blue", "bg-midnight_green"][i]
