@@ -26,6 +26,7 @@ const refreshToken = () => {
 
       // Save the access token so that it's used in future calls
       spotifyApi.setAccessToken(data.body["access_token"]);
+      refreshDaily();
       setTimeout(() => refreshToken(), data.body["expires_in"] * 1000);
     },
     function (err) {
@@ -51,8 +52,7 @@ const refreshDaily = async () => {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`)
   }
 }
-refreshDaily()
-setInterval(refreshDaily, 1000 * 60 * 60 * 24);
+setTimeout(() => setInterval(refreshDaily, 1000 * 60 * 60 * 24), (new Date().setHours(24, 0, 0, 0) - new Date().getTime()));
 
 musicRouter.use(express.json());
 
