@@ -1,14 +1,14 @@
 import express, { Request, Response } from "express";
 import SpotifyWebApi from "spotify-web-api-node";
 import { load } from "ts-dotenv";
-import { GENRES, Search } from "../models/music";
+import { DailySong, GENRES, Search } from "../models/music";
 import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
 
 export const musicRouter = express.Router();
 
-let dailySong: SpotifyApi.TrackObjectFull;
+let dailySong: DailySong;
 
 const env = load({
   SPOTIFY_CLIENT: String,
@@ -51,13 +51,13 @@ const refreshDaily = async () => {
     limit: 25,
   }));
   if (trackRes.body.tracks) {
-    dailySong = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
-    YTSR.search(`${dailySong.name} - ${dailySong.artists[0].name}`, {type: "video", limit: 25}).then(search => {
-      console.log(search[0]);
-      search.filter((v) => isGoodMusicVideoContent(v, dailySong));
-      console.log(search[0]);
+    dailySong.info = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
+    YTSR.search(`${dailySong.info.name} - ${dailySong.info.artists[0].name}`, {type: "video", limit: 25}).then(search => {
+      search.filter((v) => isGoodMusicVideoContent(v, dailySong.info));
+      if (!search[0].id) return refreshDaily();
+      dailySong.id = search[0].id
   })
-    console.log(`Refreshed Daily Song! Song: ${dailySong.name} - ${dailySong.artists[0].name}`)
+    console.log(`Refreshed Daily Song! Song: ${dailySong.info.name} - ${dailySong.info.artists[0].name}`)
   } else {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`)
   }

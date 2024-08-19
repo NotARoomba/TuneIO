@@ -25,3 +25,9 @@ export const GENRES = [
   "World",
   "Classical",
 ]
+
+export interface DailySong {
+  id: string;
+  info: SpotifyApi.TrackObjectFull;
+  
+}
