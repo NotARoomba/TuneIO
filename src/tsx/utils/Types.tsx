@@ -108,8 +108,7 @@ export interface Album {
 }
 
 export interface Buffer {
-  data: ArrayBuffer;
-  type: string;
+  data: ArrayBuffer
 }
 
 export interface Song {

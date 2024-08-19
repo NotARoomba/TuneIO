@@ -3,8 +3,6 @@ import Title from "../../components/misc/Title";
 import { callAPI } from "../../utils/Functions";
 import { STATUS_CODES, Song, SpotifyTrack } from "../../utils/Types";
 import AlertModal from "../../components/modals/AlertModal";
-import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
-import YTDL from "ytdl-core"
 
 export default function Daily() {
     const [song, setSong] = useState<Song>();
@@ -15,9 +13,10 @@ export default function Daily() {
             if (res.status == STATUS_CODES.SUCCESS) {
                 console.log(res)
                 setSong(res.song);
-                const blob = new Blob([res.song.stream.data], {type: "audio/mp3"});
+                const bufferData = new Uint8Array(res.song.stream.data);
+                const blob = new Blob([bufferData], {type: "audio/wav"});
                 setURL(URL.createObjectURL(blob));
-                 console.log(URL.createObjectURL(blob))
+                console.log(URL.createObjectURL(blob))
             } else {
                 setAlertModal(true);    
             }
