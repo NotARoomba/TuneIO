@@ -57,7 +57,7 @@ const refreshDaily = async () => {
       search.filter((v) => isGoodMusicVideoContent(v, info));
       if (!search[0].id) return refreshDaily();
       let ytInfo = await ytdl.getInfo(search[0].url);
-	    let audioFormat = ytdl.chooseFormat(ytInfo.formats, { quality: 'highestaudio', filter: 'audioonly' });
+	    let audioFormat = ytdl.chooseFormat(ytInfo.formats, { filter: 'audioonly' });
       console.log(audioFormat.url)
       dailySong = {url: audioFormat.url, info}
   })
