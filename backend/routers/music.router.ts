@@ -51,6 +51,7 @@ const refreshDaily = async () => {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`)
   }
 }
+refreshDaily()
 setInterval(refreshDaily, 1000 * 60 * 60 * 24);
 
 musicRouter.use(express.json());
