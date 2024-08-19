@@ -41,7 +41,7 @@ const refreshToken = () => {
 refreshToken();
 export function isGoodMusicVideoContent(result: Video, song: SpotifyApi.TrackObjectFull) {
   const contains = (string: any, content: string) => !!~(string || "").indexOf(content);
-  return ((result.music[0].title.toLowerCase() == song.name.toLowerCase() && result.music[0].artist.toLowerCase() == song.artists[0].name.toLowerCase()) || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
+  return ((result.music[0]?.title.toLowerCase() == song.name.toLowerCase() && result.music[0]?.artist.toLowerCase() == song.artists[0].name.toLowerCase()) || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
 }
 const refreshDaily = async () => {
   const artists = await spotifyApi.search(GENRES[Math.floor(Math.random() * GENRES.length)], ["artist"], {
