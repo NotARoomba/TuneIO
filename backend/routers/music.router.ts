@@ -44,8 +44,12 @@ const refreshDaily = async () => {
   const trackRes = (await spotifyApi.search(artists.body.artists?.items[Math.floor(Math.random() * artists.body.artists?.items.length)].name ?? "Caseiopea", ["track"], {
     limit: 25,
   }));
-  dailySong = trackRes[Math.floor(Math.random() * (trackRes.body.tracks?.items.length ?? 0))]
-  console.log(`Refreshed Daily Song! ${dailySong.name} - ${dailySong.artists[0].name}`)
+  if (trackRes.body.tracks) {
+    dailySong = trackRes.body.tracks[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
+    console.log(`Refreshed Daily Song! ${dailySong.name} - ${dailySong.artists[0].name}`)
+  } else {
+    console.error(`There was an error refreshing the daily song!\n${trackRes}`)
+  }
 }
 setInterval(refreshDaily, 1000 * 60 * 60 * 24);
 
