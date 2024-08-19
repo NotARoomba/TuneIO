@@ -8,38 +8,24 @@ import YTDL from "ytdl-core"
 
 export default function Daily() {
     const [song, setSong] = useState<Song>();
+    const [url, setURL] = useState("");
     const [alertModal, setAlertModal] = useState(false);
     useEffect(() => {
         callAPI("/music/daily", "GET").then((res: {status: STATUS_CODES, song: Song}) => {
             if (res.status == STATUS_CODES.SUCCESS) {
                 console.log(res)
                 setSong(res.song);
-                const stream = YTDL(`https://www.youtube.com/watch?v=${res.song.id}`,  {
-                    //filter: "audioonly",
-            highWaterMark: 1 << 25,
-                })
-                 console.log(stream)
+                const blob = new Blob(res.song.stream, { type: "audio/mp3" });
+                setURL(URL.createObjectURL(blob));
+                 console.log(URL.createObjectURL(blob))
             } else {
                 setAlertModal(true);    
             }
         });
     }, [])
-    const opts: YouTubeProps['opts'] = {
-        height: '0',
-        width: '0',
-        playerVars: {
-            start: 15,
-          // https://developers.google.com/youtube/player_parameters
-          autoplay: 1,
-        },
-      };
-      const onPlayerReady: YouTubeProps['onReady'] = (event: YouTubeEvent) => {
-        // access to player in all event handlers via event.target
-        // event.target.pauseVideo();
-      }
     return <div className="flex flex-col w-screen">
     <Title text="Song" reverse />
-    <YouTube videoId={song?.id} opts={opts}  onReady={onPlayerReady} />
+    <audio src={url} />
     <AlertModal
         title={"Error"}
         text={"There was an error connecting to the server!"}

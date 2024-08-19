@@ -108,6 +108,6 @@ export interface Album {
 }
 
 export interface Song {
-  id: string;
+  stream: BufferSource[];
   info: SpotifyTrack;
 }
