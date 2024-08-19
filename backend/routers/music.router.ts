@@ -47,7 +47,7 @@ const refreshDaily = async () => {
   }));
   if (trackRes.body.tracks) {
     dailySong = trackRes.body.tracks.items[Math.floor(Math.random() * (trackRes.body.tracks?.items.length))]
-    console.log(`Refreshed Daily Song! ${dailySong.name} - ${dailySong.artists[0].name}`)
+    console.log(`Refreshed Daily Song! Song: ${dailySong.name} - ${dailySong.artists[0].name}`)
   } else {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`)
   }
