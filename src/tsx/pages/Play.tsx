@@ -52,7 +52,7 @@ export default function Play() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-2 pr-8">
+        <div className="flex flex-col gap-4 pr-8">
           <PageButton
             title="Leaderboards"
             link="/leaderboards"

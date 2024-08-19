@@ -21,7 +21,7 @@ export default function PageButton({
     <Link
       to={link}
       className={
-        "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 my-3 " +
+        "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 " +
         (isDark
           ? "text-beige hover:brightness-125 "
           : "text-rich_black hover:brightness-75 ") +
@@ -35,7 +35,7 @@ export default function PageButton({
       disabled={disabled}
       onClick={action}
       className={
-        "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 my-3 " +
+        "mx-auto leading-10 transition-all duration-300 flex text-center text-2xl font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 " +
         (isDark
           ? "text-beige hover:brightness-125 "
           : "text-rich_black hover:brightness-75 ") +

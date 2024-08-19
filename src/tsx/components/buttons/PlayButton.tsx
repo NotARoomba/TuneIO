@@ -20,7 +20,7 @@ export default function PlayButton({
     <Link
       to={link}
       className={
-        "w-40 transition-all duration-300 p-2 aspect-square flex flex-col rounded-xl jusitfy-center font-medium text-2xl hover:shadow-inner-figma " +
+        "w-32 3xs:w-40 transition-all duration-300 p-2 aspect-square flex flex-col rounded-xl jusitfy-center hover:shadow-inner-figma " +
         (isDark
           ? "text-beige hover:brightness-125 "
           : "text-rich_black hover:brightness-75 ") +
@@ -28,10 +28,10 @@ export default function PlayButton({
       }
     >
       <img
-        className={"h-20 my-auto " + (!isDark ? "dark_doodle " : "")}
+        className={"h-12 3xs:h-20 my-auto " + (!isDark ? "dark_doodle " : "")}
         src={img ?? `/doodles/${title}_doodle.svg`}
       />
-      <p className="mx-auto">{title.toLocaleUpperCase()}</p>
+      <p className="mx-auto  font-medium text-lg 3xl:text-2xl">{title.toLocaleUpperCase()}</p>
     </Link>
   );
 }

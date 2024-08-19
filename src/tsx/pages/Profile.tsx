@@ -50,7 +50,7 @@ export default function Profile() {
         })()}
       </p>
 
-      <div className=" gap-y-3 w-11/12 mx-auto">
+      <div className="flex flex-col gap-4 w-11/12 mx-auto">
         <PageButton link="/" title="Home" color="bg-ash_gray" />
         <PageButton
           action={() => setEditModal(true)}

@@ -10,6 +10,7 @@ export default function Settings() {
   const difficulties = ["Easy", "Normal", "Hard"];
 
   const volumeDrag = (event: React.PointerEvent<HTMLSpanElement>) => {
+    event.stopPropagation();
     if (!dragging) return;
     setVolume(volume + 0.03 * event.movementX);
   };
@@ -30,7 +31,7 @@ export default function Settings() {
           onPointerDown={() => setDragging(true)}
           onPointerUp={() => setDragging(false)}
           onPointerMove={(e) => volumeDrag(e)}
-          className="flex select-none py-5 mx-auto min-w-full gap-1.5 justify-center"
+          className="flex select-none touch-none py-5 mx-auto min-w-full gap-1.5 justify-center"
         >
           {Array(10)
             .fill(0)

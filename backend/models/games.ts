@@ -49,3 +49,9 @@ export interface HighScore {
   time?: number;
   correct?: string;
 }
+
+export enum DIFFICULTY {
+  EASY,
+  MEDIUM,
+  HARD
+}

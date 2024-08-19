@@ -9,3 +9,20 @@ export interface Search {
   type: SearchType;
   query: string;
 }
+
+
+export const GENRES = [
+  "Pop",
+  "Rock",
+  "Hip-Hop",
+  "Metal",
+  "Jazz",
+  "Blues",
+  "Country",
+  "Latin",
+  "R&B",
+  "Folk",
+  "World",
+  "Reggae",
+  "Classical",
+]

@@ -1,10 +1,13 @@
 import express, { Request, Response } from "express";
 import SpotifyWebApi from "spotify-web-api-node";
 import { load } from "ts-dotenv";
-import { Search } from "../models/music";
+import { GENRES, Search } from "../models/music";
 import STATUS_CODES from "../models/status";
+import { DIFFICULTY } from "../models/games";
 
 export const musicRouter = express.Router();
+
+let dailySong: SpotifyApi.TrackObjectFull;
 
 const env = load({
   SPOTIFY_CLIENT: String,
@@ -34,6 +37,17 @@ const refreshToken = () => {
   );
 };
 refreshToken();
+const refreshDaily = async () => {
+  const artists = await spotifyApi.search(GENRES[Math.floor(Math.random() * GENRES.length)], ["artist"], {
+    limit: 25,
+  });
+  const trackRes = (await spotifyApi.search(artists.body.artists?.items[Math.floor(Math.random() * artists.body.artists?.items.length)].name ?? "Caseiopea", ["track"], {
+    limit: 25,
+  }));
+  dailySong = trackRes[Math.floor(Math.random() * (trackRes.body.tracks?.items.length ?? 0))]
+  console.log(`Refreshed Daily Song! ${dailySong.name} - ${dailySong.artists[0].name}`)
+}
+setInterval(refreshDaily, 1000 * 60 * 60 * 24);
 
 musicRouter.use(express.json());
 
@@ -61,3 +75,17 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     res.status(404).send({ status: STATUS_CODES.GENERIC_ERROR });
   }
 });
+
+musicRouter.get("/daily", async (req: Request, res: Response) => {
+  try {
+    res
+        .status(200)
+        .send({
+          track: dailySong,
+          status: STATUS_CODES.SUCCESS,
+        });
+  } catch (error) {
+    console.log(error);
+    res.status(404).send({ status: STATUS_CODES.GENERIC_ERROR });
+  }
+})
