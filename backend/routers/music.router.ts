@@ -69,6 +69,7 @@ const refreshDaily = async () => {
       stream.on('data', d => chunks.push(d));
       stream.on('end', () => {
         dailySong = {stream: Buffer.concat(chunks), info}
+        console.log('Buffer Recieved!')
       })      
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
