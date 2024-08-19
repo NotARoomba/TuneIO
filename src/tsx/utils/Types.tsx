@@ -106,3 +106,8 @@ export interface Album {
   artists: SpotifyArtists[];
   images: SpotifyImage[];
 }
+
+export interface Song {
+  id: string;
+  info: SpotifyTrack;
+}

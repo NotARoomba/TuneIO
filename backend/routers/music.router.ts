@@ -1,14 +1,15 @@
 import express, { Request, Response } from "express";
 import SpotifyWebApi from "spotify-web-api-node";
 import { load } from "ts-dotenv";
-import { DailySong, GENRES, Search } from "../models/music";
+import { Song, GENRES, Search } from "../models/music";
 import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
+import ytdl from "ytdl-core";
 
 export const musicRouter = express.Router();
 
-let dailySong: DailySong;
+let dailySong: Song;
 
 const env = load({
   SPOTIFY_CLIENT: String,
@@ -55,7 +56,17 @@ const refreshDaily = async () => {
     YTSR.search(`${info.name} - ${info.artists[0].name}`, {type: "video", limit: 25}).then(search => {
       search.filter((v) => isGoodMusicVideoContent(v, info));
       if (!search[0].id) return refreshDaily();
-      dailySong = {id: search[0].id, info}
+      const stream = ytdl(search[0].url, {
+				filter: "audioonly",
+        highWaterMark: 1 << 25,
+				requestOptions: {
+					headers: {
+						Cookie: process.env.YT_COOKIE,
+					}
+				}
+			})
+      console.log(stream)
+      dailySong = {stream, info}
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
   } else {
@@ -98,7 +109,8 @@ musicRouter.get("/daily", async (req: Request, res: Response) => {
         .send({
           song: dailySong,
           status: STATUS_CODES.SUCCESS,
-        });
+        })
+      
   } catch (error) {
     console.log(error);
     res.status(404).send({ status: STATUS_CODES.GENERIC_ERROR });

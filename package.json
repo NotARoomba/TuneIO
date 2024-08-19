@@ -23,8 +23,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.1",
     "react-youtube": "^10.1.0",
-    "youtube-sr": "^4.3.11",
-    "ytsr": "^3.8.4"
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

@@ -1,3 +1,5 @@
+import { Stream } from "stream";
+
 type SearchType =
   | "album"
   | "artist"
@@ -26,8 +28,7 @@ export const GENRES = [
   "Classical",
 ]
 
-export interface DailySong {
-  id: string;
+export interface Song {
+  stream: Stream;
   info: SpotifyApi.TrackObjectFull;
-  
 }
