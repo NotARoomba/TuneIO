@@ -100,15 +100,14 @@ const refreshDaily = async () => {
   .setStartTime((Math.random() * (search[0].duration-20))+10)
   .setDuration(10).withNoVideo().toFormat("mp3")
   .output(cutStream)
-  .on('end', function(err) {
-    if(!err) { console.log('Conversion Done') }
+  .on('end', async (err) => {
+    if(!err) { console.log('Conversion Done'); const buffer = await stream2buffer(cutStream)
+      // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
+        dailySong = {stream: buffer, info}
+        console.log('Buffer Recieved!') }
   })
   .on('error', err => console.log('Error during conversion: ', err))
   .run()
-  const buffer = await stream2buffer(cutStream)
-      // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
-        dailySong = {stream: buffer, info}
-        console.log('Buffer Recieved!')
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
   } else {
