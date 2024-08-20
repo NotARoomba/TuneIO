@@ -8,6 +8,7 @@ import YTSR, { Video } from "youtube-sr";
 import ytdl from "@distube/ytdl-core";
 import { Stream } from "node:stream";
 import wav from "node-wav"
+import fs, { write } from "node:fs";
 
 export const musicRouter = express.Router();
 
@@ -91,8 +92,10 @@ const refreshDaily = async () => {
 				}
 			})
       const buffer = await stream2buffer(stream)
-      const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
-        dailySong = {stream: trimmedBuffer, info}
+      // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
+        dailySong = {stream: buffer, info}
+        const writeStream = fs.createWriteStream('/daily.mp4');
+        stream.pipe(writeStream);
         console.log('Buffer Recieved!')
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
