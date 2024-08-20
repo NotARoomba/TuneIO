@@ -6,7 +6,7 @@ import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
 import ytdl from "@distube/ytdl-core";
-import internal, { Stream, Writable } from "node:stream";
+import internal, { Duplex, Stream, Writable } from "node:stream";
 import wav from "node-wav"
 import {path as ffmpegPath} from '@ffmpeg-installer/ffmpeg'
 import ffmpeg from 'fluent-ffmpeg'
@@ -93,9 +93,7 @@ const refreshDaily = async () => {
 					}
 				}
 			})
-      const cutStream = new Writable({write(chunk, encoding, callback) {
-          callback();
-      },});
+      const cutStream = new Duplex();
       ffmpeg(stream)
   .setStartTime((Math.random() * (search[0].duration-20))+10)
   .setDuration(10).withNoVideo().toFormat("mp3")
