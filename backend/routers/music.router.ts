@@ -93,7 +93,9 @@ const refreshDaily = async () => {
 					}
 				}
 			})
-      const cutStream = new internal.Writable();
+      const cutStream = new Writable({write(chunk, encoding, callback) {
+          callback();
+      },});
       ffmpeg(stream)
   .setStartTime((Math.random() * (search[0].duration-20))+10)
   .setDuration(10).withNoVideo().toFormat("mp3")
