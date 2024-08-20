@@ -6,9 +6,11 @@ import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
 import ytdl from "@distube/ytdl-core";
-import { Stream } from "node:stream";
+import { Stream, Writable } from "node:stream";
 import wav from "node-wav"
-import fs, { write } from "node:fs";
+import {path as ffmpegPath} from '@ffmpeg-installer/ffmpeg'
+import ffmpeg from 'fluent-ffmpeg'
+ffmpeg.setFfmpegPath(ffmpegPath)
 
 export const musicRouter = express.Router();
 
@@ -91,11 +93,19 @@ const refreshDaily = async () => {
 					}
 				}
 			})
-      const buffer = await stream2buffer(stream)
+      const cutStream = new Writable();
+      ffmpeg(stream)
+  .setStartTime((Math.random() * (search[0].duration-20))+10)
+  .setDuration(10)
+  .output(cutStream)
+  .on('end', function(err) {
+    if(!err) { console.log('Conversion Done') }
+  })
+  .on('error', err => console.log('Error during conversion: ', err))
+  .run()
+  const buffer = await stream2buffer(cutStream)
       // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
         dailySong = {stream: buffer, info}
-        const writeStream = fs.createWriteStream('/daily.mp4');
-        stream.pipe(writeStream);
         console.log('Buffer Recieved!')
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)
