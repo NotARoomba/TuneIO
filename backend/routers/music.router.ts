@@ -7,6 +7,7 @@ import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
 import ytdl from "@distube/ytdl-core";
 import { Stream } from "node:stream";
+import wav from "node-wav"
 
 export const musicRouter = express.Router();
 
@@ -44,15 +45,26 @@ refreshToken();
 async function stream2buffer(stream: Stream): Promise<Buffer> {
 
   return new Promise < Buffer > ((resolve, reject) => {
-      
       const _buf = Array < any > ();
-
       stream.on("data", chunk => _buf.push(chunk));
       stream.on("end", () => resolve(Buffer.concat(_buf)));
       stream.on("error", err => reject(`Error converting stream - ${err}`));
 
   });
 } 
+function trimWavBuffer(inputBuffer, startTime, duration) {
+  const decoded = wav.decode(inputBuffer);
+  const sampleRate = decoded.sampleRate;
+  const startSample = Math.floor(startTime * sampleRate);
+  const endSample = startSample + Math.floor(duration * sampleRate);
+
+  const trimmedData = decoded.channelData.map(channel =>
+      channel.slice(startSample, endSample)
+  );
+
+  const encoded = wav.encode(trimmedData, { sampleRate });
+  return encoded;
+}
 export function isGoodMusicVideoContent(result: Video, song: SpotifyApi.TrackObjectFull) {
   const contains = (string: any, content: string) => !!~(string || "").indexOf(content);
   return (result.music ? (result.music[0].title.toLowerCase() == song.name.toLowerCase() && result.music[0].artist.toLowerCase() == song.artists[0].name.toLowerCase()) : false || contains(result.channel?.name, "VEVO") || contains(result.channel?.name?.toLowerCase(), "official") || contains(result.title?.toLowerCase(), "official") || !contains(result.title?.toLowerCase(), "extended"));
@@ -79,7 +91,8 @@ const refreshDaily = async () => {
 				}
 			})
       const buffer = await stream2buffer(stream)
-        dailySong = {stream: buffer, info}
+      const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
+        dailySong = {stream: trimmedBuffer, info}
         console.log('Buffer Recieved!')
   })
     console.log(`Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`)

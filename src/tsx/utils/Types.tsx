@@ -113,5 +113,11 @@ export interface Buffer {
 
 export interface Song {
   stream: Buffer;
+  buffer: AudioBuffer,
   info: SpotifyTrack;
+  url: string;
+}
+
+export interface AudioPlayerProps {
+  song: Song;
 }

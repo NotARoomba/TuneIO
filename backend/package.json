@@ -20,6 +20,7 @@
     "express": "^4.19.2",
     "hmac-auth-express": "^8.3.4",
     "mongodb": "^5.2.0",
+    "node-wav": "^0.0.2",
     "nodemailer": "^6.9.8",
     "spotify-web-api-node": "^5.0.2",
     "ts-dotenv": "^0.9.1",
