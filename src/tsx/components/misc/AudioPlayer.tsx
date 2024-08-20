@@ -10,7 +10,7 @@ export default function AudioPlayer({song}: AudioPlayerProps) {
     const [dragging, setDragging] = useState(false);
 
     const seekDrag = (event: React.PointerEvent<HTMLSpanElement>) => {
-        event.stopPropagation();
+        event.preventDefault();
         if (!dragging) return;
         setSeek(Math.min(Math.max((seek + 0.045 * event.movementX), 0), 15));
     };

@@ -52,7 +52,7 @@ async function stream2buffer(stream: Stream): Promise<Buffer> {
 
   });
 } 
-function trimWavBuffer(inputBuffer, startTime, duration) {
+function trimWavBuffer(inputBuffer: Buffer, startTime: number, duration: number) {
   const decoded = wav.decode(inputBuffer);
   const sampleRate = decoded.sampleRate;
   const startSample = Math.floor(startTime * sampleRate);
