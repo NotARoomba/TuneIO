@@ -122,8 +122,9 @@ const refreshDaily = async () => {
         },
       });
       const cutStream = new PassThrough();
+      const seek = Math.round(Math.random() * (search[0].duration-10)+20);
       ffmpeg(stream) 
-      .seekOutput(10).setDuration(10)
+      .seekOutput(seek).setDuration(10)
         .withNoVideo()
         .toFormat("wav").outputOptions('-movflags frag_keyframe+empty_moov')
         .stream(cutStream)
