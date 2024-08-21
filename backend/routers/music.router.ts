@@ -123,7 +123,6 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream)
-        .audioBitrate(128)
         .withNoVideo()
         .toFormat("wav")
         .writeToStream(cutStream)
