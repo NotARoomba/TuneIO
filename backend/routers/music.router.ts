@@ -123,6 +123,7 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       const seek = Math.round(Math.random() * (search[0].duration-10)+20);
+      console.log(seek, search[0])
       ffmpeg(stream) 
       .seekOutput(seek).setDuration(10)
         .withNoVideo()
