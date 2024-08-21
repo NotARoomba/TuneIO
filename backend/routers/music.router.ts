@@ -112,7 +112,8 @@ const refreshDaily = async () => {
       search.filter((v) => isGoodMusicVideoContent(v, info));
       if (!search[0].id) return refreshDaily();
       const stream = ytdl(search[0].url, {
-        filter: "audioonly",
+        // filter: "audioonly",
+        quality: "highestaudio",
         highWaterMark: 1 << 25,
         requestOptions: {
           headers: {
@@ -122,9 +123,10 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream)
-          .toFormat("wav")
+        .audioBitrate(128)
         .withNoVideo()
-        .output(cutStream)
+        .toFormat("wav")
+        .writeToStream(cutStream)
         .on("end", async (err) => {
           if (!err) {
             console.log("Conversion Done");
@@ -135,7 +137,6 @@ const refreshDaily = async () => {
           }
         })
         .on("error", (err) => console.log("Error during conversion: ", err))
-        .run();
     });
     console.log(
       `Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`,
