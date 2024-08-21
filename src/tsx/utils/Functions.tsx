@@ -1,6 +1,5 @@
 import Crypto from "crypto-js";
 import { STATUS_CODES, SpotifyTrack, User } from "./Types";
-import YTSR, {Video} from "youtube-sr";
 
 const API_URL = "https://tuneio-api.notaroomba.dev";
 

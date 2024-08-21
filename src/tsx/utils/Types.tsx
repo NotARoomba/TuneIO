@@ -108,12 +108,12 @@ export interface Album {
 }
 
 export interface Buffer {
-  data: ArrayBuffer
+  data: ArrayBuffer;
 }
 
 export interface Song {
   stream: Buffer;
-  buffer: AudioBuffer,
+  buffer: AudioBuffer;
   info: SpotifyTrack;
   url: string;
 }

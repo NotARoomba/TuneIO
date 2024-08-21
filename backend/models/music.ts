@@ -12,7 +12,6 @@ export interface Search {
   query: string;
 }
 
-
 export const GENRES = [
   "Pop",
   "Rock",
@@ -26,7 +25,7 @@ export const GENRES = [
   "Folk",
   "World",
   "Classical",
-]
+];
 
 export interface Song {
   stream: ArrayBuffer;

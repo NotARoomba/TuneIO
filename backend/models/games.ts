@@ -53,5 +53,5 @@ export interface HighScore {
 export enum DIFFICULTY {
   EASY,
   MEDIUM,
-  HARD
+  HARD,
 }
