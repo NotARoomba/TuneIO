@@ -123,7 +123,6 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream) 
-      // .setStartTime(Math.random() * (search[0].duration - 20) + 10).setDuration(10)
         .withNoVideo()
         .toFormat("wav")
         .stream(cutStream)
