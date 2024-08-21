@@ -123,8 +123,9 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream) 
+      .setStartTime(0).setDuration(10)
         .withNoVideo()
-        .toFormat("wav")
+        .toFormat("wav").outputOptions('-movflags frag_keyframe+empty_moov')
         .stream(cutStream)
         .on("end", async (err) => {
           if (!err) {
@@ -133,8 +134,8 @@ const refreshDaily = async () => {
         })
         .on("error", (err) => console.log("Error during conversion: ", err))
         const buffer = await stream2buffer(cutStream);
-            const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
-            dailySong = { stream: trimmedBuffer, info };
+            // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
+            dailySong = { stream: buffer, info };
             console.log("Buffer Recieved!");
     });
     console.log(
