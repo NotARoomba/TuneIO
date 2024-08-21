@@ -25,7 +25,7 @@ var spotifyApi = new SpotifyWebApi({
   clientId: env.SPOTIFY_CLIENT,
   clientSecret: env.SPOTIFY_SECRET,
 });
-const refreshToken = () => {
+const refreshToken = async () => {
   spotifyApi.clientCredentialsGrant().then(
     function (data) {
       console.log("The access token expires in " + data.body["expires_in"]);
@@ -43,7 +43,14 @@ const refreshToken = () => {
     },
   );
 };
-refreshToken();
+const init = async () => {
+  await refreshToken();
+  await refreshDaily();
+  setTimeout(
+    () => setInterval(refreshDaily, 1000 * 60 * 60 * 24),
+    new Date().setHours(24, 0, 0, 0) - new Date().getTime(),
+  );
+}
 async function stream2buffer(stream: Stream): Promise<Buffer> {
   return new Promise<Buffer>((resolve, reject) => {
     const _buf = Array<any>();
@@ -145,14 +152,8 @@ const refreshDaily = async () => {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`);
   }
 };
-while (!spotifyApi.getAccessToken()) {
-  
-}
-refreshDaily();
-setTimeout(
-  () => setInterval(refreshDaily, 1000 * 60 * 60 * 24),
-  new Date().setHours(24, 0, 0, 0) - new Date().getTime(),
-);
+
+init();
 
 musicRouter.use(express.json());
 
