@@ -125,11 +125,10 @@ const refreshDaily = async () => {
       ffmpeg(stream)
         .withNoVideo()
         .toFormat("wav")
-        .writeToStream(cutStream)
+        .stream(cutStream)
         .on("end", async (err) => {
           if (!err) {
             console.log("Conversion Done");
-            
           }
         })
         .on("error", (err) => console.log("Error during conversion: ", err))
