@@ -26,13 +26,13 @@ var spotifyApi = new SpotifyWebApi({
   clientSecret: env.SPOTIFY_SECRET,
 });
 const refreshToken = async () => {
-  const data = await spotifyApi.clientCredentialsGrant()
-    console.log("The access token expires in " + data.body["expires_in"]);
-    console.log("The access token is " + data.body["access_token"]);
+  const data = await spotifyApi.clientCredentialsGrant();
+  console.log("The access token expires in " + data.body["expires_in"]);
+  console.log("The access token is " + data.body["access_token"]);
 
-    // Save the access token so that it's used in future calls
-    spotifyApi.setAccessToken(data.body["access_token"]);
-    setTimeout(() => refreshToken(), data.body["expires_in"] * 1000);
+  // Save the access token so that it's used in future calls
+  spotifyApi.setAccessToken(data.body["access_token"]);
+  setTimeout(() => refreshToken(), data.body["expires_in"] * 1000);
 };
 const init = async () => {
   await refreshToken();
@@ -41,7 +41,7 @@ const init = async () => {
     () => setInterval(refreshDaily, 1000 * 60 * 60 * 24),
     new Date().setHours(24, 0, 0, 0) - new Date().getTime(),
   );
-}
+};
 async function stream2buffer(stream: Stream): Promise<Buffer> {
   return new Promise<Buffer>((resolve, reject) => {
     const _buf = Array<any>();
@@ -105,22 +105,21 @@ const refreshDaily = async () => {
         },
       });
       const cutStream = new PassThrough();
-      const seek = Math.round(Math.random() * ((search[0].duration/1000)-10)+20);
-      console.log(seek, search[0])
-      ffmpeg(stream) 
-      .seekOutput(seek).setDuration(10)
+      const seek = Math.round(
+        Math.random() * (search[0].duration / 1000 - 10) + 20,
+      );
+      console.log(seek, search[0]);
+      ffmpeg(stream)
+        .seekOutput(seek)
+        .setDuration(10)
         .withNoVideo()
-        .toFormat("wav").outputOptions('-movflags frag_keyframe+empty_moov')
+        .toFormat("wav")
+        .outputOptions("-movflags frag_keyframe+empty_moov")
         .stream(cutStream)
-        .on("end", async (err) => {
-          if (!err) {
-            console.log("Conversion Done");
-          }
-        })
-        .on("error", (err) => console.log("Error during conversion: ", err))
-        const buffer = await stream2buffer(cutStream);
-            dailySong = { stream: buffer, info };
-            console.log("Buffer Recieved!");
+        .on("error", (err) => console.log("Error during conversion: ", err));
+      const buffer = await stream2buffer(cutStream);
+      dailySong = { stream: buffer, info };
+      console.log("Buffer Created!");
     });
     console.log(
       `Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`,
