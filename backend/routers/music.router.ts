@@ -149,8 +149,9 @@ const refreshDaily = async () => {
   }
 };
 while (!spotifyApi.getAccessToken()) {
-  refreshDaily();
+  
 }
+refreshDaily();
 setTimeout(
   () => setInterval(refreshDaily, 1000 * 60 * 60 * 24),
   new Date().setHours(24, 0, 0, 0) - new Date().getTime(),
