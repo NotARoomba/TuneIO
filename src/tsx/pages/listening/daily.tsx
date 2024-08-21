@@ -7,7 +7,7 @@ import AudioPlayer from "../../components/misc/AudioPlayer";
 import LoadingScreen from "../../components/misc/LoadingScreen";
 
 export default function Daily() {
-  const [song, setSong] = useState<Song>();
+  const [song, setSong] = useState<Song | null>(null);
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   useEffect(() => {

@@ -22,6 +22,7 @@
     "react-loader-spinner": "^6.1.6",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.1",
+    "react-use-audio-player": "^2.2.0",
     "react-youtube": "^10.1.0",
     "webaudio-peaks": "^1.0.0",
     "ytdl-core": "^4.11.5"
