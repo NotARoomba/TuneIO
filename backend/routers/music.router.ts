@@ -124,11 +124,8 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream)
-        .setStartTime(Math.random() * (search[0].duration - 20) + 10)
         .withNoVideo()
-        .toFormat("wav")
         .output(cutStream)
-        .setDuration(10)
         .on("end", async (err) => {
           if (!err) {
             console.log("Conversion Done");
