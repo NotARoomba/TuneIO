@@ -124,16 +124,16 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream)
-        .setStartTime(Math.random() * (search[0].duration - 20) + 10)
+        .setStartTime(0)
         .withNoVideo()
         .toFormat("wav")
         .output(cutStream)
-        .setDuration(10)
+        .setDuration(search[0].duration)
         .on("end", async (err) => {
           if (!err) {
             console.log("Conversion Done");
             const buffer = await stream2buffer(cutStream);
-            // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
+            const trimmedBuffer = trimWavBuffer(buffer, (Math.random()*(search[0].duration-10)+20), 10);
             dailySong = { stream: buffer, info };
             console.log("Buffer Recieved!");
           }
