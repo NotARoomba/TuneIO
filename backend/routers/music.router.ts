@@ -141,7 +141,7 @@ const refreshDaily = async () => {
     );
   } else {
     console.error(`There was an error refreshing the daily song!\n${trackRes}`);
-    return await refreshDaily();
+    await refreshDaily();
   }
 };
 
