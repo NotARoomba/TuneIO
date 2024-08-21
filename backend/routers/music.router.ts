@@ -122,7 +122,7 @@ const refreshDaily = async () => {
         },
       });
       const cutStream = new PassThrough();
-      ffmpeg(stream)
+      ffmpeg(stream) .setStartTime(Math.random() * (search[0].duration - 20) + 10).setDuration(10)
         .withNoVideo()
         .toFormat("wav")
         .stream(cutStream)
@@ -134,8 +134,8 @@ const refreshDaily = async () => {
         .on("error", (err) => console.log("Error during conversion: ", err))
         const buffer = await stream2buffer(cutStream);
             // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
-            dailySong = { stream: buffer, info };
-            console.log("Buffer Recieved!");
+        dailySong = { stream: buffer, info };
+        console.log("Buffer Recieved!");
     });
     console.log(
       `Refreshed Daily Song! Song: ${info.name} - ${info.artists[0].name}`,
