@@ -50,23 +50,6 @@ async function stream2buffer(stream: Stream): Promise<Buffer> {
     stream.on("error", (err) => reject(`Error converting stream - ${err}`));
   });
 }
-function trimWavBuffer(
-  inputBuffer: Buffer,
-  startTime: number,
-  duration: number,
-) {
-  const decoded = wav.decode(inputBuffer);
-  const sampleRate = decoded.sampleRate;
-  const startSample = Math.floor(startTime * sampleRate);
-  const endSample = startSample + Math.floor(duration * sampleRate);
-
-  const trimmedData = decoded.channelData.map((channel) =>
-    channel.slice(startSample, endSample),
-  );
-
-  const encoded = wav.encode(trimmedData, { sampleRate });
-  return encoded;
-}
 export function isGoodMusicVideoContent(
   result: Video,
   song: SpotifyApi.TrackObjectFull,
@@ -123,6 +106,7 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       const seek = Math.round(Math.random() * ((search[0].duration/1000)-10)+20);
+      console.log(seek, search[0])
       ffmpeg(stream) 
       .seekOutput(seek).setDuration(10)
         .withNoVideo()
@@ -135,7 +119,6 @@ const refreshDaily = async () => {
         })
         .on("error", (err) => console.log("Error during conversion: ", err))
         const buffer = await stream2buffer(cutStream);
-            // const trimmedBuffer = trimWavBuffer(buffer, Math.random()*search[0].duration, 10);
             dailySong = { stream: buffer, info };
             console.log("Buffer Recieved!");
     });
