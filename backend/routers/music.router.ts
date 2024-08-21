@@ -122,6 +122,7 @@ const refreshDaily = async () => {
       });
       const cutStream = new PassThrough();
       ffmpeg(stream)
+          .toFormat("wav")
         .withNoVideo()
         .output(cutStream)
         .on("end", async (err) => {
