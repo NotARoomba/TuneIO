@@ -74,10 +74,15 @@ const refreshDaily = async () => {
       limit: 25,
     },
   );
+  const artist = artists.body.artists?.items[
+    Math.floor(Math.random() * artists.body.artists?.items.length)
+  ];
+  if (!artist) {
+    await refreshDaily();
+    return;
+  }
   const trackRes = await spotifyApi.search(
-    artists.body.artists?.items[
-      Math.floor(Math.random() * artists.body.artists?.items.length)
-    ].name ?? "Caseiopea",
+    artist.name,
     ["track"],
     {
       limit: 25,
@@ -118,7 +123,7 @@ const refreshDaily = async () => {
         .stream(cutStream)
         .on("error", (err) => console.log("Error during conversion: ", err));
       const buffer = await stream2buffer(cutStream);
-      dailySong = { stream: buffer, info };
+      dailySong = { stream: buffer, info: {...info, genre: artist.genres[0]} };
       console.log("Buffer Created!");
     });
     console.log(

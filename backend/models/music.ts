@@ -27,7 +27,11 @@ export const GENRES = [
   "Classical",
 ];
 
+interface InfoGenre extends SpotifyApi.TrackObjectFull {
+  genre: string
+}
+
 export interface Song {
   stream: ArrayBuffer;
-  info: SpotifyApi.TrackObjectFull;
+  info: InfoGenre;
 }
