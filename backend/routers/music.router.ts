@@ -19,7 +19,10 @@ let dailySong: Song;
 const env = load({
   SPOTIFY_CLIENT: String,
   SPOTIFY_SECRET: String,
+  YT_COOKIES: String
 });
+
+const agent = ytdl.createAgent(JSON.parse(env.YT_COOKIES))
 
 var spotifyApi = new SpotifyWebApi({
   clientId: env.SPOTIFY_CLIENT,
@@ -103,11 +106,12 @@ const refreshDaily = async () => {
         filter: "audioonly",
         quality: "highestaudio",
         highWaterMark: 1 << 25,
-        requestOptions: {
-          headers: {
-            Cookie: process.env.YT_COOKIE,
-          },
-        },
+        // requestOptions: {
+        //   headers: {
+        //     Cookie: env.YT_COOKIE,
+        //   },
+        // },
+        agent
       });
       const cutStream = new PassThrough();
       const seek = Math.round(
