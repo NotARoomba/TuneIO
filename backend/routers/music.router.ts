@@ -108,7 +108,7 @@ const refreshDaily = async () => {
       const seek = Math.round(
         Math.random() * (search[0].duration / 1000 - 10) + 20,
       );
-      console.log(seek, search[0]);
+      // console.log(seek, search[0]);
       ffmpeg(stream)
         .seekOutput(seek)
         .setDuration(10)
@@ -141,7 +141,7 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
       limit: 5,
     });
     search.body[`${data.type}s`]?.items.forEach(async (v: any) => {
-      v.genre = (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]
+      v = {...v, genre: (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]}
     })
     if (search.statusCode == 200) {
       res.status(200).send({
