@@ -141,7 +141,9 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
       limit: 5,
     });
     search.body[`${data.type}s`]?.items.forEach(async (v: any) => {
-      v = {...v, genre: (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]}
+      const genre = (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]
+      console.log(genre)
+      v = {...v, genre}
     })
     if (search.statusCode == 200) {
       res.status(200).send({

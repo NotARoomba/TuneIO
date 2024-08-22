@@ -113,14 +113,14 @@ export default function Daily() {
           Submit
         </button>
         )}
-      <div className="flex flex-col w-11/12 mx-auto justify-center">
+      {guesses.length !== 0 && <div className="flex flex-col w-11/12 mx-auto justify-center animate-show">
         <div className="flex justify-evenly text-2xl font-medium">
           <p>Genre</p>
           <p>Artist</p>
           <p>Album</p>
         </div>
         {song && guesses.map((v, i) => <SongGuess key={i} guess={v} answer={song.info} />)}
-      </div>
+      </div>}
       <LoadingScreen loading={loading} />
       <AlertModal
         title={alertMsg[0]}
