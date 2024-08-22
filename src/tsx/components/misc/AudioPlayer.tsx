@@ -35,7 +35,7 @@ export default function AudioPlayer({ song }: AudioPlayerProps) {
   const [heights, _setHeights] = useState(
     Array(15)
       .fill(0)
-      .map((v) => (v = Math.random() * 75 + 25)),
+      .map((v) => (v = Math.random() * 60 + 15)),
   );
   useEffect(() => {
     audioPlayer.load(song.url, {
@@ -44,7 +44,7 @@ export default function AudioPlayer({ song }: AudioPlayerProps) {
     });
   }, []);
   return (
-    <div className="flex align-middle  gap-8 mx-auto">
+    <div className="flex align-middle gap-8 mx-auto">
       <div
         onClick={() => {
           audioPlayer.togglePlayPause();
@@ -63,7 +63,7 @@ export default function AudioPlayer({ song }: AudioPlayerProps) {
           onPointerDown={() => setDragging(true)}
           onPointerUp={() => setDragging(false)}
           onPointerMove={(e) => seekDrag(e)}
-          className="flex select-none align-middle touch-none py-5 gap-1.5 justify-center"
+          className="flex select-none align-middle touch-none py-5 gap-2 justify-center"
         >
           {heights.map((v, i) => (
             <span
@@ -71,18 +71,18 @@ export default function AudioPlayer({ song }: AudioPlayerProps) {
               key={i}
               style={{ height: v }}
               className={
-                " rounded w-2 my-auto transition-colors duration-300 " +
+                " rounded w-1.5 my-auto transition-colors duration-300 " +
                 (i < Math.round(seek * 1.5) ? "bg-beige" : "bg-beige/40")
               }
             />
           ))}
         </div>
-        <p className="text-xl mx-auto -mt-2">
+        {/* <p className="text-xl mx-auto -mt-2">
           00:
           {Math.floor(seek) < 10
             ? "0" + Math.floor(seek).toString()
             : Math.floor(seek)}
-        </p>
+        </p> */}
       </div>
       <p className="text-5xl my-auto transition-all duration-300">{listens}</p>
     </div>

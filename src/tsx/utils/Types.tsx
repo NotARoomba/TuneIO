@@ -45,7 +45,7 @@ export interface User {
   avatar: string;
   username: string;
   email: string;
-  album: Album;
+  album: SpotifyAlbum;
   dateJoined: Date;
 }
 
@@ -80,7 +80,7 @@ export interface ModalButtonProps {
   selected?: boolean;
 }
 
-export interface AlbumOptionProps {
+export interface SearchOptionProps {
   title: string;
   img: string;
 }
@@ -98,10 +98,11 @@ export interface SpotifyArtists {
 export interface SpotifyTrack {
   name: string;
   genre: string;
+  album: SpotifyAlbum
   artists: SpotifyArtists[];
 }
 
-export interface Album {
+export interface SpotifyAlbum {
   name: string;
   artists: SpotifyArtists[];
   images: SpotifyImage[];
@@ -120,4 +121,14 @@ export interface Song {
 
 export interface AudioPlayerProps {
   song: Song;
+}
+
+export interface SongGuessProps {
+  guess: SpotifyTrack;
+  answer: SpotifyTrack;
+}
+
+export interface GuessBoxProps {
+  guess: string;
+  answer: string
 }

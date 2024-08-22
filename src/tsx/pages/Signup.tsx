@@ -8,12 +8,12 @@ import {
   checkIfLogin,
   deleteCookies,
 } from "../utils/Functions";
-import { Album, STATUS_CODES } from "../utils/Types";
+import { SpotifyAlbum, STATUS_CODES } from "../utils/Types";
 import ModalButton from "../components/buttons/ModalButton";
 import LoadingScreen from "../components/misc/LoadingScreen";
 import AlertModal from "../components/modals/AlertModal";
 import VerificationModal from "../components/modals/VerificationModal";
-import AlbumOption from "../components/misc/AlbumOption";
+import SearchOption from "../components/misc/SearchOption";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [search, setSearch] = useState([]);
-  const [album, setAlbum] = useState<Album | null>();
+  const [album, setAlbum] = useState<SpotifyAlbum | null>();
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
   const [loading, setLoading] = useState(false);
@@ -122,7 +122,7 @@ export default function Signup() {
           onChange={(e) => setEmail(e.currentTarget.value.toLocaleLowerCase())}
           className="mx-auto my-2 bg-transparent text-center px-2 outline rounded outline-primary"
         />
-        <p className="mx-auto">Favorite Album</p>
+        <p className="mx-auto">Favorite SpotifyAlbum</p>
         <input
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.currentTarget.value)}
@@ -151,8 +151,8 @@ export default function Signup() {
             }
           >
             {search
-              .filter((v: Album) => v.images.length !== 0)
-              .map((v: Album, i) => (
+              .filter((v: SpotifyAlbum) => v.images.length !== 0)
+              .map((v: SpotifyAlbum, i) => (
                 <div
                   key={i}
                   onClick={() => {
@@ -161,7 +161,7 @@ export default function Signup() {
                   }}
                   className=" cursor-pointer"
                 >
-                  <AlbumOption title={v.name} img={v.images[0].url} />
+                  <SearchOption title={v.name} img={v.images[0].url} />
                 </div>
               ))}
           </div>

@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { Album, BaseModalProps, STATUS_CODES } from "../../utils/Types";
+import { SpotifyAlbum, BaseModalProps, STATUS_CODES } from "../../utils/Types";
 import AlertModal from "./AlertModal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { callAPI, checkIfLogin } from "../../utils/Functions";
 import VerificationModal from "./VerificationModal";
 import ModalButton from "../buttons/ModalButton";
 import LoadingScreen from "../misc/LoadingScreen";
-import AlbumOption from "../misc/AlbumOption";
+import SearchOption from "../misc/SearchOption";
 
 export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
   const [email, setEmail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [search, setSearch] = useState([]);
-  const [album, setAlbum] = useState<Album | null>();
+  const [album, setAlbum] = useState<SpotifyAlbum | null>();
   const [oldEmail, setOldEmail] = useState("");
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState<string[]>(["", ""]);
@@ -108,7 +108,7 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
             onChange={(e) => setEmail(e.currentTarget.value)}
             className="mx-auto my-2  bg-transparent text-center outline rounded outline-primary"
           />
-          <p className="text-2xl font-bold ">Favorite Album</p>
+          <p className="text-2xl font-bold ">Favorite SpotifyAlbum</p>
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
@@ -123,8 +123,8 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
               }
             >
               {search
-                .filter((v: Album) => v.images.length !== 0)
-                .map((v: Album, i) => (
+                .filter((v: SpotifyAlbum) => v.images.length !== 0)
+                .map((v: SpotifyAlbum, i) => (
                   <div
                     key={i}
                     onClick={() => {
@@ -133,7 +133,7 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
                     }}
                     className=" cursor-pointer"
                   >
-                    <AlbumOption title={v.name} img={v.images[0].url} />
+                    <SearchOption title={v.name} img={v.images[0].url} />
                   </div>
                 ))}
             </div>
