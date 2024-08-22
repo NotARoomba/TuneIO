@@ -30,6 +30,7 @@ export default function Daily() {
         if (res.status == STATUS_CODES.SUCCESS) {
           const bufferData = new Uint8Array(res.song.stream.data);
           const blob = new Blob([bufferData], { type: "audio/wav" });
+          console.log(res.song.info)
           setSong({ ...res.song, url: URL.createObjectURL(blob) });
           setLoading(false);
         } else {

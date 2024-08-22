@@ -124,6 +124,7 @@ const refreshDaily = async () => {
         .on("error", (err) => console.log("Error during conversion: ", err));
       const buffer = await stream2buffer(cutStream);
       dailySong = { stream: buffer, info: {...info, genre: artist.genres[0]} };
+      console.log(dailySong.info)
       console.log("Buffer Created!");
     });
     console.log(
