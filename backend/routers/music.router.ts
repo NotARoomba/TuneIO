@@ -152,10 +152,10 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     let items: InfoGenre[] = search.body[`${data.type}s`]?.items ?? []
     if (search.body.tracks) {
       items = (search.body[`${data.type}s`]?.items) ?? []
-      search.body[`${data.type}s`]?.items.map(async (v: any) => {
+      items = search.body[`${data.type}s`]?.items.map(async (v: any) => {
         const genre = (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]
         return {...items, genre}
-      })
+      }) as unknown as InfoGenre[]
     }
     if (search.statusCode == 200) {
       res.status(200).send({
