@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import SpotifyWebApi from "spotify-web-api-node";
 import { load } from "ts-dotenv";
-import { Song, GENRES, Search } from "../models/music";
+import { Song, GENRES, Search, InfoGenre } from "../models/music";
 import STATUS_CODES from "../models/status";
 import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
@@ -149,11 +149,14 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     const search = await spotifyApi.search(data.query, [data.type], {
       limit: 5,
     });
-    let items = search.body[`${data.type}s`]?.items ?? []
-    search.body[`${data.type}s`]?.items.map(async (v: any) => {
-      const genre = (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]
-      return {...items, genre}
-    })
+    let items: InfoGenre[] = search.body[`${data.type}s`]?.items ?? []
+    if (search.body.tracks) {
+      items = (search.body[`${data.type}s`]?.items) ?? []
+      search.body[`${data.type}s`]?.items.map(async (v: any) => {
+        const genre = (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]
+        return {...items, genre}
+      })
+    }
     if (search.statusCode == 200) {
       res.status(200).send({
         search: items,
