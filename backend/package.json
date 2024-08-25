@@ -1,7 +1,7 @@
 {
-  "name": "makinator-backend",
+  "name": "tuneio-backend",
   "version": "1.0.0",
-  "description": "Makinator Backend",
+  "description": "TuneIO Backend",
   "main": "index.ts",
   "scripts": {
     "build": "npm i",
