@@ -155,10 +155,9 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
       v["genre"] = genre;
       console.log(v)
     })
-    console.log(items)
     if (search.statusCode == 200) {
       res.status(200).send({
-        search: items,
+        search: structuredClone(items),
         status: STATUS_CODES.SUCCESS,
       });
     } else {
