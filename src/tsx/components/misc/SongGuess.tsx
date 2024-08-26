@@ -5,7 +5,7 @@ import GuessBox from "./GuessBox";
 export default function SongGuess({guess, answer}: SongGuessProps) {
     return <div className="flex flex-col mx-auto my-2">
         <div className="flex gap-3">
-            <GuessBox guess={guess.genre.charAt(0).toUpperCase() + guess.genre.slice(1)} answer={answer.genre.charAt(0).toUpperCase() + answer.genre.slice(1)} />
+            <GuessBox guess={guess.genre ? guess.genre.charAt(0).toUpperCase() + guess.genre.slice(1) : "???"} answer={answer.genre.charAt(0).toUpperCase() + answer.genre.slice(1)} />
             <GuessBox guess={guess.artists[0].name} answer={answer.artists[0].name} />
             <GuessBox guess={guess.album.name} answer={answer.album.name} />
         </div>
