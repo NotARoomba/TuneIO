@@ -60,8 +60,8 @@ export interface User {
   email: string;
   album: SpotifyAlbum;
   dateJoined: Date;
-  listeningData: ListeningData | null,
-  typingData: TypingData | null,
+  listeningData: ListeningData | null;
+  typingData: TypingData | null;
 }
 
 export interface LoadingScreenProps {
@@ -110,10 +110,10 @@ export interface SpotifyArtist {
   name: string;
 }
 
-export interface  SpotifyTrack {
+export interface SpotifyTrack {
   name: string;
   genre: string;
-  album: SpotifyAlbum
+  album: SpotifyAlbum;
   artists: SpotifyArtist[];
 }
 
@@ -145,7 +145,7 @@ export interface SongGuessProps {
 
 export interface GuessBoxProps {
   guess: string;
-  answer: string
+  answer: string;
 }
 
 export enum GAMES {

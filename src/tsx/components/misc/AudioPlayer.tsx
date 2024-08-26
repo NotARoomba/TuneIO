@@ -1,7 +1,7 @@
 import { PauseCircle, PlayCircle } from "react-feather";
 import { AudioPlayerProps } from "../../utils/Types";
 import { useEffect, useRef, useState } from "react";
-import { useAudioPlayer, useGlobalAudioPlayer } from "react-use-audio-player";
+import { useAudioPlayer } from "react-use-audio-player";
 
 export default function AudioPlayer({ song }: AudioPlayerProps) {
   const [seek, setSeek] = useState(0);

@@ -18,10 +18,10 @@ let dailySong: Song;
 const env = load({
   SPOTIFY_CLIENT: String,
   SPOTIFY_SECRET: String,
-  YT_COOKIES: String
+  YT_COOKIES: String,
 });
 
-const agent = ytdl.createAgent(JSON.parse(env.YT_COOKIES))
+const agent = ytdl.createAgent(JSON.parse(env.YT_COOKIES));
 
 var spotifyApi = new SpotifyWebApi({
   clientId: env.SPOTIFY_CLIENT,
@@ -69,32 +69,27 @@ export function isGoodMusicVideoContent(
         !contains(result.title?.toLowerCase(), "extended");
 }
 const refreshDaily = async () => {
-  const genre = GENRES[Math.floor(Math.random() * GENRES.length)]
-  const artists = await spotifyApi.search(
-   genre,
-    ["artist"],
-    {
-      limit: 25,
-    },
-  );
-  const artist = artists.body.artists?.items[
-    Math.floor(Math.random() * artists.body.artists?.items.length)
-  ];
+  const genre = GENRES[Math.floor(Math.random() * GENRES.length)];
+  const artists = await spotifyApi.search(genre, ["artist"], {
+    limit: 25,
+  });
+  const artist =
+    artists.body.artists?.items[
+      Math.floor(Math.random() * artists.body.artists?.items.length)
+    ];
   if (!artist) {
     await refreshDaily();
     return;
   }
-  const trackRes = await spotifyApi.search(
-    artist.name,
-    ["track"],
-    {
-      limit: 25,
-    },
-  );
+  const trackRes = await spotifyApi.search(artist.name, ["track"], {
+    limit: 25,
+  });
   if (trackRes.body.tracks) {
     trackRes.body.tracks.items.filter(async (v) => {
-      (await spotifyApi.getArtist(v["artists"][0].id)).body.genres.includes(genre)
-    })
+      (await spotifyApi.getArtist(v["artists"][0].id)).body.genres.includes(
+        genre,
+      );
+    });
     const info =
       trackRes.body.tracks.items[
         Math.floor(Math.random() * trackRes.body.tracks?.items.length)
@@ -114,7 +109,7 @@ const refreshDaily = async () => {
         //     Cookie: env.YT_COOKIE,
         //   },
         // },
-        agent
+        agent,
       });
       const cutStream = new PassThrough();
       const seek = Math.round(
@@ -130,7 +125,7 @@ const refreshDaily = async () => {
         .stream(cutStream)
         .on("error", (err) => console.log("Error during conversion: ", err));
       const buffer = await stream2buffer(cutStream);
-      dailySong = { stream: buffer, info: {...info, genre} };
+      dailySong = { stream: buffer, info: { ...info, genre } };
       console.log("Buffer Created!");
     });
     console.log(
@@ -152,10 +147,12 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     const search = await spotifyApi.search(data.query, [data.type], {
       limit: 5,
     });
-    let items = search.body[`${data.type}s`]?.items as unknown as any ?? []
+    let items = (search.body[`${data.type}s`]?.items as unknown as any) ?? [];
     for (let i = 0; i < items.length; i++) {
-      const genre = (await spotifyApi.getArtist(items[i]["artists"][0].id)).body.genres.filter(v => GENRES.includes(v))
-      items[i].genre = genre[0]
+      const genre = (
+        await spotifyApi.getArtist(items[i]["artists"][0].id)
+      ).body.genres.filter((v) => GENRES.includes(v));
+      items[i].genre = genre[0];
     }
     if (search.statusCode == 200) {
       res.status(200).send({

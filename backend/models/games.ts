@@ -24,7 +24,10 @@ export interface ListeningGame extends Game {
 
 export interface Game {
   time: number;
-  info: SpotifyApi.TrackObjectFull | SpotifyApi.AlbumObjectFull | SpotifyApi.ArtistObjectFull;
+  info:
+    | SpotifyApi.TrackObjectFull
+    | SpotifyApi.AlbumObjectFull
+    | SpotifyApi.ArtistObjectFull;
   gameType: GAME_TYPES;
   score: number;
   date: number;

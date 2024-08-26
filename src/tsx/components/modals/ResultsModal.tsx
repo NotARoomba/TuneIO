@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { GAMES, ResultsModalProps } from "../../utils/Types";
+import { ResultsModalProps } from "../../utils/Types";
 import LinkButton from "../buttons/PageButton";
 import { getCookie } from "../../utils/Functions";
 import ModalButton from "../buttons/ModalButton";
@@ -44,17 +44,28 @@ export default function ResultsModal({
         <p className="text-4xl font-bold mt-2 text-air_force_blue">Game Over</p>
         <p className="text-lg font-medium ">
           {"guesses" in statistics
-            ? `You found "${statistics.info.name}" in ${statistics.guesses} guess${statistics.guesses ==1?"":"es"}!`
+            ? `You found "${statistics.info.name}" in ${statistics.guesses} guess${statistics.guesses == 1 ? "" : "es"}!`
             : `You guessed ${statistics.correct} ${statistics.correct} correctly!`}
         </p>
         <div className="flex text-center justify-around text-lg my-2  text-nowrap">
           <div className="w-1/3 font-medium">
             <p className=" text-md font-bold ">High Score</p>
-            <p>{highscore ? new Date(highscore.time * 1000).toISOString().slice(11, 19) : "???"}</p>
-            <p>{highscore?.score ??  "???"}</p>
-            <Marquee delay={1} speed={25} className="text-xl m-auto"> <p className="mx-2.5">{highscore?.info.name ?? "???"}</p></Marquee>
             <p>
-              {highscore ? "guesses" in highscore ? highscore.guesses : highscore.correct : "???"}
+              {highscore
+                ? new Date(highscore.time * 1000).toISOString().slice(11, 19)
+                : "???"}
+            </p>
+            <p>{highscore?.score ?? "???"}</p>
+            <Marquee delay={1} speed={25} className="text-xl m-auto">
+              {" "}
+              <p className="mx-2.5">{highscore?.info.name ?? "???"}</p>
+            </Marquee>
+            <p>
+              {highscore
+                ? "guesses" in highscore
+                  ? highscore.guesses
+                  : highscore.correct
+                : "???"}
             </p>
           </div>
           <div className="w-1/3 flex flex-col justify-center font-bold text-secondary-300">
@@ -62,7 +73,9 @@ export default function ResultsModal({
             <p className="text-center">Time</p>
             <p className="text-center">Score</p>
             <p className="text-center">Name</p>
-            <p className="text-center">{game.includes("listening") ? "Guesses" : "Correct"}</p>
+            <p className="text-center">
+              {game.includes("listening") ? "Guesses" : "Correct"}
+            </p>
           </div>
           <div className="w-1/3 font-medium ">
             <p className=" text-lg font-bold">Your Score</p>
@@ -70,20 +83,25 @@ export default function ResultsModal({
               {new Date(statistics.time * 1000).toISOString().slice(11, 19)}
             </p>
             <p>{statistics.score}</p>
-            <Marquee delay={1} speed={25} className="text-xl m-auto"> <p className="mx-2.5">{statistics.info.name}</p></Marquee>
+            <Marquee delay={1} speed={25} className="text-xl m-auto">
+              {" "}
+              <p className="mx-2.5">{statistics.info.name}</p>
+            </Marquee>
             <p>
-              {"guesses" in statistics ? statistics.guesses : statistics.correct}
+              {"guesses" in statistics
+                ? statistics.guesses
+                : statistics.correct}
             </p>
           </div>
         </div>
         {!getCookie("userID") ? (
-          <div className="flex text-xl font-bold justify-center text-center px-10 mx-auto flex-col">
+          <div className="flex text-lg font-bold justify-center text-center mx-auto flex-col">
             <p>
               Login or sign up to view your score on the global leaderboard!
             </p>
-            <div className="flex justify-center">
-              <LinkButton title="Login" link="/login" />
-              <LinkButton title="Sign up" link="/signup" />
+            <div className="flex justify-center  font-bold text-xl gap-8">
+              <ModalButton text="Login" route="/login" />
+              <ModalButton text="Sign up" route="/signup" />
             </div>
           </div>
         ) : (
@@ -93,7 +111,11 @@ export default function ResultsModal({
           </div>
         )}
         <div className="flex mx-auto mt-3">
-          <LinkButton title="Close" color="bg-midnight_green" action={() => setIsOpen(!isOpen)} />
+          <LinkButton
+            title="Close"
+            color="bg-midnight_green"
+            action={() => setIsOpen(!isOpen)}
+          />
         </div>
       </div>
     </Modal>

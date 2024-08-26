@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
 import Title from "../../components/misc/Title";
 import { callAPI, checkIfLogin } from "../../utils/Functions";
-import { SpotifyAlbum, STATUS_CODES, Song, SpotifyTrack, GAMES, ListeningGame, GAME_TYPES, TypingGame, SpotifyArtist, User, Game } from "../../utils/Types";
+import {
+  SpotifyAlbum,
+  STATUS_CODES,
+  Song,
+  SpotifyTrack,
+  GAMES,
+  ListeningGame,
+  GAME_TYPES,
+  TypingGame,
+  SpotifyArtist,
+  User,
+  Game,
+} from "../../utils/Types";
 import AlertModal from "../../components/modals/AlertModal";
 import AudioPlayer from "../../components/misc/AudioPlayer";
 import LoadingScreen from "../../components/misc/LoadingScreen";
@@ -20,43 +32,67 @@ export default function Daily() {
   const [guesses, setGuesses] = useState<SpotifyTrack[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [search, setSearch] = useState([]);
-  const [alertOpt, setAlertOpt] = useState({title: "Error", msg: "An error occured!", action: () => {}});
+  const [alertOpt, setAlertOpt] = useState({
+    title: "Error",
+    msg: "An error occured!",
+    action: () => {},
+  });
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gameOverModal, setGameOverModal] = useState(false);
-  const [gameData, setGameData] = useState<ListeningGame>({gameType: GAME_TYPES.SONG, guesses: 0, score: 0, time: 0, info: {name: ""}} as ListeningGame);
+  const [gameData, setGameData] = useState<ListeningGame>({
+    gameType: GAME_TYPES.SONG,
+    guesses: 0,
+    score: 0,
+    time: 0,
+    info: { name: "" },
+  } as ListeningGame);
   const [highscore, setHighscore] = useState<ListeningGame>();
   const [time, setTime] = useState(0);
-  const setAlert = (msg: string, title: string = "Error", action: () => void = () => {}) => {
-    setAlertOpt({title, msg, action});
+  const setAlert = (
+    msg: string,
+    title: string = "Error",
+    action: () => void = () => {},
+  ) => {
+    setAlertOpt({ title, msg, action });
     setAlertModal(true);
   };
   const resetGame = async () => {
     setLoading(true);
     const user = await checkIfLogin();
     setUser(user);
-    if (user) {
-      const lastGame = user.listeningData?.dailyGames.sort((a: Game, b: Game) => b.date - a.date)[0]
-      if (new Date(lastGame?.date ?? 0).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) {
+    if (user && user.listeningData) {
+      const lastGame = user.listeningData.dailyGames.sort(
+        (a: Game, b: Game) => b.date - a.date,
+      )[0];
+      if (
+        new Date(lastGame?.date ?? 0).toLocaleDateString() ==
+        new Date(Date.now()).toLocaleDateString()
+      ) {
         setGameData(lastGame);
         setGameOver(true);
       }
     }
-    const res: { status: STATUS_CODES; song: Song } = await callAPI("/music/daily", "GET")
-        if (res.status == STATUS_CODES.SUCCESS) {
-          const bufferData = new Uint8Array(res.song.stream.data);
-          const blob = new Blob([bufferData], { type: "audio/wav" });
-          setSong({ ...res.song, url: URL.createObjectURL(blob) });
-          setGuesses([]);
-          setGuess(null);
-          setTime(0);
-          setSearchQuery("")
-          setLoading(false);
-        } else {
-          setAlert("There was an error fetching the daily song!", "Error", () => navigate("/play"));
-          setLoading(false);
-        }
+    const res: { status: STATUS_CODES; song: Song } = await callAPI(
+      "/music/daily",
+      "GET",
+    );
+    if (res.status == STATUS_CODES.SUCCESS) {
+      const bufferData = new Uint8Array(res.song.stream.data);
+      const blob = new Blob([bufferData], { type: "audio/wav" });
+      setSong({ ...res.song, url: URL.createObjectURL(blob) });
+      setGuesses([]);
+      setGuess(null);
+      setTime(0);
+      setSearchQuery("");
+      setLoading(false);
+    } else {
+      setAlert("There was an error fetching the daily song!", "Error", () =>
+        navigate("/play"),
+      );
+      setLoading(false);
+    }
   };
   useEffect(() => {
     resetGame();
@@ -67,7 +103,7 @@ export default function Daily() {
     setSearchQuery("");
     if (guess.name == song?.info.name) setGameOver(true);
     setGuess(null);
-  }
+  };
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
@@ -102,85 +138,97 @@ export default function Daily() {
     if (!gameOver) return;
     setLoading(true);
     const updateUserGame = async () => {
-      const game: ListeningGame = {gameType: GAME_TYPES.SONG, time, guesses: guesses.length, score: Math.round((((60/time)*(10/(guesses.length)))*10000)), info: song?.info ?? {} as SpotifyTrack, date: Date.now()};
+      const game: ListeningGame = {
+        gameType: GAME_TYPES.SONG,
+        time,
+        guesses: guesses.length,
+        score: Math.round((60 / time) * (10 / guesses.length) * 10000),
+        info: song?.info ?? ({} as SpotifyTrack),
+        date: Date.now(),
+      };
       if (user) {
-        if (!gameData) { 
-          setGameData(gameData ?? game);
-          const updateRes = await callAPI("/games/update", "POST", {
+        setGameData(game);
+        const updateRes = await callAPI("/games/update", "POST", {
           userID: user._id,
           type: GAMES.LISTENING_DAILY,
-          game
+          game,
         });
         if (updateRes.status !== STATUS_CODES.SUCCESS) {
           setAlert("There was an error uploading the score!");
         }
-      }
-        const highscoreRes = await callAPI(`/users/${user._id}/highscore?gameType=${GAMES.LISTENING_DAILY}`, "GET");
+        const highscoreRes = await callAPI(
+          `/users/${user._id}/highscore?gameType=${GAMES.LISTENING_DAILY}`,
+          "GET",
+        );
         if (highscoreRes.status !== STATUS_CODES.SUCCESS) {
           setAlert("There was an error getting your highscore!");
         }
-        setHighscore(highscoreRes.highscore)
+        setHighscore(highscoreRes.highscore);
       }
-      setGameOverModal(true);
-      setLoading(false);
-    }
+      setGameData(game);
+    };
+    setGameOverModal(true);
+    setLoading(false);
     updateUserGame();
-  }, [gameOver])
+  }, [gameOver]);
   return (
     <div className="flex flex-col w-screen">
       <Title text="Song" reverse />
       {song && <AudioPlayer song={song} />}
       <input
         value={searchQuery}
-        onChange={(e) =>
-          setSearchQuery(e.currentTarget.value)
-        }
+        onChange={(e) => setSearchQuery(e.currentTarget.value)}
         placeholder="input"
         className="mx-auto my-2 text-rich_black text-2xl bg-beige min-h-11 w-72 text-center rounded-lg"
       />
       {!guess && (
-          <div
-            className={
-              "flex w-72 gap-2 my-2 flex-col max-h-24 overflow-scroll min-w-72 mx-auto " +
-              (!guess ? "animate-show" : "animate-hide")
-            }
-          >
-            {search
-              .filter((v: SpotifyTrack) => v.album.images.length !== 0)
-              .map((v: SpotifyTrack, i) => (
-                <div
-                  key={i}
-                  onClick={() => {
-                    setGuess(v);
-                    setSearchQuery(v.name);
-                  }}
-                  className=" cursor-pointer"
-                >
-                  <SearchOption title={v.name} img={v.album.images[0].url} />
-                </div>
-              ))}
-          </div>
-        )}
-        {guess && (
-          <button
+        <div
+          className={
+            "flex w-72 gap-2 my-2 flex-col max-h-24 overflow-scroll min-w-72 mx-auto " +
+            (!guess ? "animate-show" : "animate-hide")
+          }
+        >
+          {search
+            .filter((v: SpotifyTrack) => v.album.images.length !== 0)
+            .map((v: SpotifyTrack, i) => (
+              <div
+                key={i}
+                onClick={() => {
+                  setGuess(v);
+                  setSearchQuery(v.name);
+                }}
+                className=" cursor-pointer"
+              >
+                <SearchOption title={v.name} img={v.album.images[0].url} />
+              </div>
+            ))}
+        </div>
+      )}
+      {guess && (
+        <button
           onClick={submitGuess}
           className={
-            "mx-auto leading-10 transition-all text-beige hover:brightness-125 duration-300 flex text-center text-lg font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 bg-midnight_green  " 
+            "mx-auto leading-10 transition-all text-beige hover:brightness-125 duration-300 flex text-center text-lg font-medium rounded-lg justify-center min-h-11 py-auto align-middle w-72 bg-midnight_green  "
           }
         >
           Submit
         </button>
-        )}
-      {guesses.length !== 0 && <div className="flex flex-col w-11/12 mx-auto justify-center animate-show">
-        <div className="flex justify-evenly text-2xl font-medium">
-          <p>Genre</p>
-          <p>Artist</p>
-          <p>Album</p>
-        </div>
-        <div className=" overflow-y-scroll max-h-64 flex flex-col">
-        {song && guesses.map((v, i) => <SongGuess key={i} guess={v} answer={song.info} />)}
+      )}
+      {guesses.length !== 0 && (
+        <div className="flex flex-col w-11/12 mx-auto justify-center animate-show">
+          <div className="flex justify-evenly text-2xl font-medium">
+            <p>Genre</p>
+            <p>Artist</p>
+            <p>Album</p>
           </div>
-      </div>}
+          <div className=" overflow-y-scroll max-h-64 flex flex-col">
+            {song &&
+              guesses.map((v, i) => (
+                <SongGuess key={i} guess={v} answer={song.info} />
+              ))}
+          </div>
+        </div>
+      )}
       <LoadingScreen loading={loading} />
       <AlertModal
         title={alertOpt.title}
@@ -189,7 +237,14 @@ export default function Daily() {
         isOpen={alertModal}
         setIsOpen={setAlertModal}
       />
-      <ResultsModal isOpen={gameOverModal} setIsOpen={setGameOverModal} highscore={highscore} statistics={gameData} game={GAMES.LISTENING_DAILY} resetGame={() =>navigate("/play")} />
+      <ResultsModal
+        isOpen={gameOverModal}
+        setIsOpen={setGameOverModal}
+        highscore={highscore}
+        statistics={gameData}
+        game={GAMES.LISTENING_DAILY}
+        resetGame={() => navigate("/play")}
+      />
     </div>
   );
 }
