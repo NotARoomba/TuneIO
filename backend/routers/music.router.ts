@@ -155,7 +155,7 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     let items = search.body[`${data.type}s`]?.items as unknown as any ?? []
     for (let i = 0; i < items.length; i++) {
       const genre = (await spotifyApi.getArtist(items[i]["artists"][0].id)).body.genres.filter(v => GENRES.includes(v))
-      items[i].genre = genre[0]
+      items[i].genre = genre[0] ?? dailySong.info.genre
     }
     if (search.statusCode == 200) {
       res.status(200).send({

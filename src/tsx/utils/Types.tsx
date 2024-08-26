@@ -185,6 +185,6 @@ export interface TypingGame extends Game {
 export interface ResultsModalProps extends BaseModalProps {
   game: GAMES;
   statistics: ListeningGame | TypingGame;
-  highscore: ListeningGame | TypingGame;
+  highscore: ListeningGame | TypingGame | undefined;
   resetGame: () => void;
 }

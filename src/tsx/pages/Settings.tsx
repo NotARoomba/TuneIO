@@ -53,6 +53,7 @@ export default function Settings() {
         >
           {difficulties.map((v, i) => (
             <div
+              key={i}
               onClick={(e) =>
                 e.currentTarget.scrollIntoView({ behavior: "smooth" })
               }

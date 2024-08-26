@@ -25,7 +25,7 @@ export default function Daily() {
   const [alertModal, setAlertModal] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gameOverModal, setGameOverModal] = useState(false);
-  const [gameData, setGameData] = useState<ListeningGame>();
+  const [gameData, setGameData] = useState<ListeningGame>({gameType: GAME_TYPES.SONG, guesses: 0, score: 0, time: 0, info: {name: ""}} as ListeningGame);
   const [highscore, setHighscore] = useState<ListeningGame>();
   const [time, setTime] = useState(0);
   const setAlert = (msg: string, title: string = "Error", action: () => void = () => {}) => {
@@ -36,10 +36,8 @@ export default function Daily() {
     setLoading(true);
     const user = await checkIfLogin();
     setUser(user);
-    
     if (user) {
       const lastGame = user.listeningData?.dailyGames.sort((a: Game, b: Game) => b.date - a.date)[0]
-      console.log(new Date(lastGame?.date ?? 0).toLocaleDateString())
       if (new Date(lastGame?.date ?? 0).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) {
         setGameData(lastGame);
         setGameOver(true);
@@ -73,7 +71,8 @@ export default function Daily() {
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
-      if (searchQuery.length == 0 || guess?.name == searchQuery) {
+      if (gameOver) setGameOverModal(true);
+      if (searchQuery.length == 0 || (guess && guess.name === searchQuery)) {
         setLoading(false);
         setSearch([]);
         return;
@@ -117,7 +116,6 @@ export default function Daily() {
         }
       }
         const highscoreRes = await callAPI(`/users/${user._id}/highscore?gameType=${GAMES.LISTENING_DAILY}`, "GET");
-        console.log(highscoreRes)
         if (highscoreRes.status !== STATUS_CODES.SUCCESS) {
           setAlert("There was an error getting your highscore!");
         }
@@ -191,7 +189,7 @@ export default function Daily() {
         isOpen={alertModal}
         setIsOpen={setAlertModal}
       />
-      {highscore && gameData && <ResultsModal isOpen={gameOverModal} setIsOpen={setGameOverModal} highscore={highscore} statistics={gameData} game={GAMES.LISTENING_DAILY} resetGame={resetGame} />}
+      <ResultsModal isOpen={gameOverModal} setIsOpen={setGameOverModal} highscore={highscore} statistics={gameData} game={GAMES.LISTENING_DAILY} resetGame={() =>navigate("/play")} />
     </div>
   );
 }

@@ -50,11 +50,11 @@ export default function ResultsModal({
         <div className="flex text-center justify-around text-lg my-2  text-nowrap">
           <div className="w-1/3 font-medium">
             <p className=" text-md font-bold ">High Score</p>
-            <p>{new Date(highscore.time * 1000).toISOString().slice(11, 19)}</p>
-            <p>{highscore.score}</p>
-            <Marquee delay={1} speed={25} className="text-xl m-auto"> <p className="mx-2.5">{highscore.info.name}</p></Marquee>
+            <p>{highscore ? new Date(highscore.time * 1000).toISOString().slice(11, 19) : "???"}</p>
+            <p>{highscore?.score ??  "???"}</p>
+            <Marquee delay={1} speed={25} className="text-xl m-auto"> <p className="mx-2.5">{highscore?.info.name ?? "???"}</p></Marquee>
             <p>
-              {"guesses" in highscore ? highscore.guesses : highscore.correct}
+              {highscore ? "guesses" in highscore ? highscore.guesses : highscore.correct : "???"}
             </p>
           </div>
           <div className="w-1/3 flex flex-col justify-center font-bold text-secondary-300">
