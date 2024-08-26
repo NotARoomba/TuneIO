@@ -1,9 +1,8 @@
 import express, { Request, Response } from "express";
 import SpotifyWebApi from "spotify-web-api-node";
 import { load } from "ts-dotenv";
-import { Song, GENRES, Search, InfoGenre } from "../models/music";
+import { Song, GENRES, Search } from "../models/music";
 import STATUS_CODES from "../models/status";
-import { DIFFICULTY } from "../models/games";
 import YTSR, { Video } from "youtube-sr";
 import ytdl from "@distube/ytdl-core";
 import internal, { Duplex, PassThrough, Stream, Writable } from "node:stream";
@@ -70,8 +69,9 @@ export function isGoodMusicVideoContent(
         !contains(result.title?.toLowerCase(), "extended");
 }
 const refreshDaily = async () => {
+  const genre = GENRES[Math.floor(Math.random() * GENRES.length)]
   const artists = await spotifyApi.search(
-    GENRES[Math.floor(Math.random() * GENRES.length)],
+   genre,
     ["artist"],
     {
       limit: 25,
@@ -92,6 +92,9 @@ const refreshDaily = async () => {
     },
   );
   if (trackRes.body.tracks) {
+    trackRes.body.tracks.items.filter(async (v) => {
+      (await spotifyApi.getArtist(v["artists"][0].id)).body.genres.includes(genre)
+    })
     const info =
       trackRes.body.tracks.items[
         Math.floor(Math.random() * trackRes.body.tracks?.items.length)
@@ -127,7 +130,7 @@ const refreshDaily = async () => {
         .stream(cutStream)
         .on("error", (err) => console.log("Error during conversion: ", err));
       const buffer = await stream2buffer(cutStream);
-      dailySong = { stream: buffer, info: {...info, genre: artist.genres[0]} };
+      dailySong = { stream: buffer, info: {...info, genre} };
       console.log("Buffer Created!");
     });
     console.log(
@@ -149,13 +152,11 @@ musicRouter.post("/search", async (req: Request, res: Response) => {
     const search = await spotifyApi.search(data.query, [data.type], {
       limit: 5,
     });
-    let items: InfoGenre[] = search.body[`${data.type}s`]?.items ?? []
-    items = (search.body[`${data.type}s`]?.items) ?? []
-    items = items.map<any>(async (v: any) => {
-      const genre = (await spotifyApi.getArtist(v.artists[0].id)).body.genres[0]
-      return {...items, genre}
-    })
-    console.log(items[0].genre)
+    let items = search.body[`${data.type}s`]?.items as unknown as any ?? []
+    for (let i = 0; i < items.length; i++) {
+      const genre = (await spotifyApi.getArtist(items[i]["artists"][0].id)).body.genres.filter(v => GENRES.includes(v))
+      items[i].genre = genre
+    }
     if (search.statusCode == 200) {
       res.status(200).send({
         search: items,

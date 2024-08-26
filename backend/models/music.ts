@@ -1,34 +1,29 @@
 import { Stream } from "stream";
 
 type SearchType =
- | "album"
- | "artist"
- | "playlist"
- | "track"
- | "show"
- | "episode";
+  | "album"
+  | "artist"
+  | "playlist"
+  | "track"
+  | "show"
+  | "episode";
 export interface Search {
   type: SearchType;
   query: string;
 }
 
 export const GENRES = [
-  "Pop",
-  "Rock",
-  "Hip-Hop",
-  "Metal",
-  "Jazz",
-  "Blues",
-  "Country",
-  "Latin",
-  "R&B",
-  "Folk",
-  "World",
-  "Classical",
+  "pop",
+  "rock",
+  "hip hop",
+  "jazz",
+  "country",
+  "reggaeton",
+  "classical",
 ];
 
-export type InfoGenre<T = SpotifyApi.ArtistObjectFull | SpotifyApi.TrackObjectFull|SpotifyApi.AlbumObjectSimplified|SpotifyApi.PlaylistObjectSimplified|SpotifyApi.ShowObjectSimplified|SpotifyApi.EpisodeObjectSimplified> = T & {
-  genre?: string
+interface InfoGenre extends SpotifyApi.TrackObjectFull {
+  genre: string
 }
 
 export interface Song {

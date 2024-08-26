@@ -91,20 +91,20 @@ export interface SpotifyImage {
   url: string;
 }
 
-export interface SpotifyArtists {
+export interface SpotifyArtist {
   name: string;
 }
 
-export interface SpotifyTrack {
+export interface  SpotifyTrack {
   name: string;
   genre: string;
   album: SpotifyAlbum
-  artists: SpotifyArtists[];
+  artists: SpotifyArtist[];
 }
 
 export interface SpotifyAlbum {
   name: string;
-  artists: SpotifyArtists[];
+  artists: SpotifyArtist[];
   images: SpotifyImage[];
 }
 
@@ -131,4 +131,44 @@ export interface SongGuessProps {
 export interface GuessBoxProps {
   guess: string;
   answer: string
+}
+
+export enum GAMES {
+  LISTENING_DAILY = "listeningData.dailyGames",
+  LISTENING_SONG = "listeningData.songGames",
+  LISTENING_ALBUM = "listeningData.albumGames",
+  LISTENING_ARTIST = "listeningData.artistGames",
+  TYPING_LYRICS = "typingData.lyricsGames",
+  TYPING_ALBUM = "typingData.albumGames",
+  TYPING_ARTIST = "typingData.artistGames",
+}
+
+export enum GAME_TYPES {
+  SONG,
+  ALBUM,
+  ARTIST,
+  LYRICS,
+}
+
+export interface ListeningGame extends Game {
+  guesses: number;
+}
+
+export interface Game {
+  time: number;
+  info: SpotifyTrack | SpotifyAlbum | SpotifyArtist;
+  gameType: GAME_TYPES;
+  score: number;
+}
+
+export interface TypingGame extends Game {
+  correct: number;
+  incorrect: number;
+}
+
+export interface ResultsModalProps extends BaseModalProps {
+  game: GAMES;
+  statistics: ListeningGame | TypingGame;
+  highscore: ListeningGame | TypingGame;
+  resetGame: () => void;
 }

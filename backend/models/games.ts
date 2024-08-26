@@ -22,17 +22,18 @@ export interface ListeningGame extends Game {
 }
 
 export interface Game {
+  time: number;
   gameType: GAME_TYPES;
   score: number;
 }
 
 export interface TypingGame extends Game {
-  time: number;
   correct: number;
   incorrect: number;
 }
 
 export enum GAMES {
+  LISTENING_DAILY = "listeningData.dailyGames",
   LISTENING_SONG = "listeningData.songGames",
   LISTENING_ALBUM = "listeningData.albumGames",
   LISTENING_ARTIST = "listeningData.artistGames",

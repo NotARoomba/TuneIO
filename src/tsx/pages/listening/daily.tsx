@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Title from "../../components/misc/Title";
-import { callAPI } from "../../utils/Functions";
-import { SpotifyAlbum, STATUS_CODES, Song, SpotifyTrack } from "../../utils/Types";
+import { callAPI, checkIfLogin } from "../../utils/Functions";
+import { SpotifyAlbum, STATUS_CODES, Song, SpotifyTrack, GAMES, ListeningGame, GAME_TYPES, TypingGame, SpotifyArtist } from "../../utils/Types";
 import AlertModal from "../../components/modals/AlertModal";
 import AudioPlayer from "../../components/misc/AudioPlayer";
 import LoadingScreen from "../../components/misc/LoadingScreen";
@@ -9,9 +9,10 @@ import SearchOption from "../../components/misc/SearchOption";
 import ModalButton from "../../components/buttons/ModalButton";
 import PageButton from "../../components/buttons/PageButton";
 import SongGuess from "../../components/misc/SongGuess";
+import ResultsModal from "../../components/modals/ResultsModal";
 
 export default function Daily() {
-  const [song, setSong] = useState<Song | null>(null);
+  const [song, setSong] = useState<Song>();
   const [guess, setGuess] = useState<SpotifyTrack | null>();
   const [guesses, setGuesses] = useState<SpotifyTrack[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,30 +20,42 @@ export default function Daily() {
   const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameOverModal, setGameOverModal] = useState(false);
+  const [gameData, setGameData] = useState<ListeningGame>();
+  const [highscore, setHighscore] = useState<ListeningGame>();
+  const [time, setTime] = useState(0);
   const setAlert = (msg: string, title?: string) => {
     title ? setAlertMsg([title, msg]) : setAlertMsg(["Error", msg]);
     setAlertModal(true);
   };
-  useEffect(() => {
+  const resetGame = () => {
     setLoading(true);
     callAPI("/music/daily", "GET").then(
       (res: { status: STATUS_CODES; song: Song }) => {
         if (res.status == STATUS_CODES.SUCCESS) {
           const bufferData = new Uint8Array(res.song.stream.data);
           const blob = new Blob([bufferData], { type: "audio/wav" });
-          console.log(res.song.info)
           setSong({ ...res.song, url: URL.createObjectURL(blob) });
+          setGuesses([]);
+          setGuess(null);
+          setTime(0);
+          setSearchQuery("")
           setLoading(false);
         } else {
           setAlertModal(true);
           setLoading(false);
         }
-      },
-    );
+      })
+  };
+  useEffect(() => {
+    resetGame();
   }, []);
   const submitGuess = () => {
     if (!guess) return;
     setGuesses([...guesses, guess]);
+    setSearchQuery("");
+    if (guess.name == song?.info.name) setGameOver(true);
     setGuess(null);
   }
   useEffect(() => {
@@ -58,7 +71,6 @@ export default function Daily() {
         query: searchQuery,
         type: "track",
       });
-      console.log(res);
       if (res.status !== STATUS_CODES.SUCCESS) {
         setLoading(false);
         return setAlert("There was an error fetching the tracks!");
@@ -69,6 +81,40 @@ export default function Daily() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
+  useEffect(() => {
+    const interval = setInterval(() => setTime(time + 1), 1000);
+    return () => clearInterval(interval);
+  }, [time]);
+  useEffect(() => {
+    //upload game to user profile
+    //show modal
+    if (!gameOver) return;
+    setLoading(true);
+    const updateUserGame = async () => {
+      const user = await checkIfLogin();
+      const game: ListeningGame = {gameType: GAME_TYPES.SONG, time, guesses: guesses.length, score: Math.round((((60/time)*(10/(guesses.length)))*10000)), info: song?.info ?? {} as SpotifyTrack};
+      setGameData(game);
+      if (user) {
+        const updateRes = await callAPI("/games/update", "POST", {
+          userID: user._id,
+          type: GAMES.LISTENING_DAILY,
+          game
+        });
+        if (updateRes.status !== STATUS_CODES.SUCCESS) {
+          setAlert("There was an error uploading the score!");
+        }
+        const highscoreRes = await callAPI(`/users/${user._id}/highscore?gameType=${GAMES.LISTENING_DAILY}`, "GET");
+        console.log(highscoreRes)
+        if (highscoreRes.status !== STATUS_CODES.SUCCESS) {
+          setAlert("There was an error getting your highscore!");
+        }
+        setHighscore(highscoreRes.highscore)
+      }
+      setGameOverModal(true);
+      setLoading(false);
+    }
+    updateUserGame();
+  }, [gameOver])
   return (
     <div className="flex flex-col w-screen">
       <Title text="Song" reverse />
@@ -120,7 +166,9 @@ export default function Daily() {
           <p>Artist</p>
           <p>Album</p>
         </div>
+        <div className=" overflow-y-scroll max-h-64 flex flex-col">
         {song && guesses.map((v, i) => <SongGuess key={i} guess={v} answer={song.info} />)}
+          </div>
       </div>}
       <LoadingScreen loading={loading} />
       <AlertModal
@@ -129,6 +177,7 @@ export default function Daily() {
         isOpen={alertModal}
         setIsOpen={setAlertModal}
       />
+      {highscore && gameData && <ResultsModal isOpen={gameOverModal} setIsOpen={setGameOverModal} highscore={highscore} statistics={gameData} game={GAMES.LISTENING_DAILY} resetGame={resetGame} />}
     </div>
   );
 }
