@@ -40,6 +40,19 @@ export enum STATUS_CODES {
   NONE_IN_USE,
 }
 
+export interface ListeningData {
+  dailyGames: Array<ListeningGame>;
+  songGames: Array<ListeningGame>;
+  albumGames: Array<ListeningGame>;
+  artistGames: Array<ListeningGame>;
+}
+
+export interface TypingData {
+  lyricsGames: Array<TypingGame>;
+  albumGames: Array<TypingGame>;
+  artistGames: Array<TypingGame>;
+}
+
 export interface User {
   _id: string;
   avatar: string;
@@ -47,6 +60,8 @@ export interface User {
   email: string;
   album: SpotifyAlbum;
   dateJoined: Date;
+  listeningData: ListeningData | null,
+  typingData: TypingData | null,
 }
 
 export interface LoadingScreenProps {
@@ -159,6 +174,7 @@ export interface Game {
   info: SpotifyTrack | SpotifyAlbum | SpotifyArtist;
   gameType: GAME_TYPES;
   score: number;
+  date: number;
 }
 
 export interface TypingGame extends Game {

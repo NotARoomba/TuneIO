@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Title from "../../components/misc/Title";
 import { callAPI, checkIfLogin } from "../../utils/Functions";
-import { SpotifyAlbum, STATUS_CODES, Song, SpotifyTrack, GAMES, ListeningGame, GAME_TYPES, TypingGame, SpotifyArtist } from "../../utils/Types";
+import { SpotifyAlbum, STATUS_CODES, Song, SpotifyTrack, GAMES, ListeningGame, GAME_TYPES, TypingGame, SpotifyArtist, User, Game } from "../../utils/Types";
 import AlertModal from "../../components/modals/AlertModal";
 import AudioPlayer from "../../components/misc/AudioPlayer";
 import LoadingScreen from "../../components/misc/LoadingScreen";
@@ -10,14 +10,17 @@ import ModalButton from "../../components/buttons/ModalButton";
 import PageButton from "../../components/buttons/PageButton";
 import SongGuess from "../../components/misc/SongGuess";
 import ResultsModal from "../../components/modals/ResultsModal";
+import { useNavigate } from "react-router-dom";
 
 export default function Daily() {
+  const navigate = useNavigate();
   const [song, setSong] = useState<Song>();
+  const [user, setUser] = useState<User | false>(false);
   const [guess, setGuess] = useState<SpotifyTrack | null>();
   const [guesses, setGuesses] = useState<SpotifyTrack[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [search, setSearch] = useState([]);
-  const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
+  const [alertOpt, setAlertOpt] = useState({title: "Error", msg: "An error occured!", action: () => {}});
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -25,14 +28,16 @@ export default function Daily() {
   const [gameData, setGameData] = useState<ListeningGame>();
   const [highscore, setHighscore] = useState<ListeningGame>();
   const [time, setTime] = useState(0);
-  const setAlert = (msg: string, title?: string) => {
-    title ? setAlertMsg([title, msg]) : setAlertMsg(["Error", msg]);
+  const setAlert = (msg: string, title: string = "Error", action: () => void = () => {}) => {
+    setAlertOpt({title, msg, action});
     setAlertModal(true);
   };
-  const resetGame = () => {
+  const resetGame = async () => {
     setLoading(true);
-    callAPI("/music/daily", "GET").then(
-      (res: { status: STATUS_CODES; song: Song }) => {
+    const user = await checkIfLogin();
+    setUser(user);
+    if (user && new Date(user.listeningData?.dailyGames.sort((a: Game, b: Game) => b.date - a.date)[0].date ?? 0).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) setAlert("You have already played today!", "Error", () => navigate("/play"))
+    const res: { status: STATUS_CODES; song: Song } = await callAPI("/music/daily", "GET")
         if (res.status == STATUS_CODES.SUCCESS) {
           const bufferData = new Uint8Array(res.song.stream.data);
           const blob = new Blob([bufferData], { type: "audio/wav" });
@@ -43,10 +48,9 @@ export default function Daily() {
           setSearchQuery("")
           setLoading(false);
         } else {
-          setAlertModal(true);
+          setAlert("There was an error fetching the daily song!", "Error", () => navigate("/play"));
           setLoading(false);
         }
-      })
   };
   useEffect(() => {
     resetGame();
@@ -91,8 +95,7 @@ export default function Daily() {
     if (!gameOver) return;
     setLoading(true);
     const updateUserGame = async () => {
-      const user = await checkIfLogin();
-      const game: ListeningGame = {gameType: GAME_TYPES.SONG, time, guesses: guesses.length, score: Math.round((((60/time)*(10/(guesses.length)))*10000)), info: song?.info ?? {} as SpotifyTrack};
+      const game: ListeningGame = {gameType: GAME_TYPES.SONG, time, guesses: guesses.length, score: Math.round((((60/time)*(10/(guesses.length)))*10000)), info: song?.info ?? {} as SpotifyTrack, date: Date.now()};
       setGameData(game);
       if (user) {
         const updateRes = await callAPI("/games/update", "POST", {
@@ -172,8 +175,9 @@ export default function Daily() {
       </div>}
       <LoadingScreen loading={loading} />
       <AlertModal
-        title={alertMsg[0]}
-        text={alertMsg[1]}
+        title={alertOpt.title}
+        text={alertOpt.msg}
+        action={alertOpt.action}
         isOpen={alertModal}
         setIsOpen={setAlertModal}
       />

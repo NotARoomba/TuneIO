@@ -1,4 +1,5 @@
 export interface ListeningData {
+  dailyGames: Array<ListeningGame>;
   songGames: Array<ListeningGame>;
   albumGames: Array<ListeningGame>;
   artistGames: Array<ListeningGame>;
@@ -23,8 +24,10 @@ export interface ListeningGame extends Game {
 
 export interface Game {
   time: number;
+  info: SpotifyApi.TrackObjectFull | SpotifyApi.AlbumObjectFull | SpotifyApi.ArtistObjectFull;
   gameType: GAME_TYPES;
   score: number;
+  date: number;
 }
 
 export interface TypingGame extends Game {
