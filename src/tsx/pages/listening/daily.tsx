@@ -36,7 +36,15 @@ export default function Daily() {
     setLoading(true);
     const user = await checkIfLogin();
     setUser(user);
-    if (user && new Date(user.listeningData?.dailyGames.sort((a: Game, b: Game) => b.date - a.date)[0].date ?? 0).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) setAlert("You have already played today!", "Error", () => navigate("/play"))
+    
+    if (user) {
+      const lastGame = user.listeningData?.dailyGames.sort((a: Game, b: Game) => b.date - a.date)[0]
+      console.log(new Date(lastGame?.date ?? 0).toLocaleDateString())
+      if (new Date(lastGame?.date ?? 0).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) {
+        setGameData(lastGame);
+        setGameOver(true);
+      }
+    }
     const res: { status: STATUS_CODES; song: Song } = await callAPI("/music/daily", "GET")
         if (res.status == STATUS_CODES.SUCCESS) {
           const bufferData = new Uint8Array(res.song.stream.data);
@@ -96,9 +104,10 @@ export default function Daily() {
     setLoading(true);
     const updateUserGame = async () => {
       const game: ListeningGame = {gameType: GAME_TYPES.SONG, time, guesses: guesses.length, score: Math.round((((60/time)*(10/(guesses.length)))*10000)), info: song?.info ?? {} as SpotifyTrack, date: Date.now()};
-      setGameData(game);
       if (user) {
-        const updateRes = await callAPI("/games/update", "POST", {
+        if (!gameData) { 
+          setGameData(gameData ?? game);
+          const updateRes = await callAPI("/games/update", "POST", {
           userID: user._id,
           type: GAMES.LISTENING_DAILY,
           game
@@ -106,6 +115,7 @@ export default function Daily() {
         if (updateRes.status !== STATUS_CODES.SUCCESS) {
           setAlert("There was an error uploading the score!");
         }
+      }
         const highscoreRes = await callAPI(`/users/${user._id}/highscore?gameType=${GAMES.LISTENING_DAILY}`, "GET");
         console.log(highscoreRes)
         if (highscoreRes.status !== STATUS_CODES.SUCCESS) {

@@ -1,8 +1,8 @@
 import Crypto from "crypto-js";
 import { STATUS_CODES, SpotifyTrack, User } from "./Types";
 
-// const API_URL = "https://tuneio-api.notaroomba.dev";
-const API_URL = "http://127.0.0.1:3001";
+const API_URL = "https://tuneio-api.notaroomba.dev";
+// const API_URL = "http://127.0.0.1:3001";
 
 export async function callAPI(
   endpoint: string,
