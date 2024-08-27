@@ -14,7 +14,7 @@ export default function ResultsModal({
   resetGame,
   setIsOpen,
 }: ResultsModalProps) {
-  const [hours, minutes, seconds] = useCountdown();
+  const [days, hours, minutes, seconds] = useCountdown();
   return (
     <Modal
       ariaHideApp={false}
@@ -49,10 +49,10 @@ export default function ResultsModal({
             ? `You found "${statistics.info.name}" in ${statistics.guesses} guess${statistics.guesses == 1 ? "" : "es"}!`
             : `You guessed ${statistics.correct} ${statistics.correct} correctly!`}
         </p>
-        <p key={seconds} className="">New Song in {hours}:{minutes}:{seconds}</p>
+        <p className="font-bold text-ash_gray">New Song in {hours < 10 ? "0" + hours: hours}:{minutes < 10 ? "0" + minutes: minutes}:{seconds < 10 ? "0" + seconds: seconds}</p>
         <div className="flex text-center justify-around text-lg my-2  text-nowrap">
           <div className="w-1/3 font-medium">
-            <p className=" text-md font-bold ">High Score</p>
+            <p className=" text-md font-bold text-air_force_blue ">High Score</p>
             <p>
               {highscore
                 ? new Date(highscore.time * 1000).toISOString().slice(11, 19)
@@ -72,7 +72,7 @@ export default function ResultsModal({
             </p>
           </div>
           <div className="w-1/3 flex flex-col justify-center font-bold text-secondary-300">
-            <p className=" text-xl text-text text-center ">_</p>
+            <p className=" text-xl text-text text-center text-air_force_blue font-medium ">_</p>
             <p className="text-center">Time</p>
             <p className="text-center">Score</p>
             <p className="text-center">Name</p>
@@ -81,14 +81,13 @@ export default function ResultsModal({
             </p>
           </div>
           <div className="w-1/3 font-medium ">
-            <p className=" text-lg font-bold">Your Score</p>
+            <p className=" text-lg font-bold text-air_force_blue">Your Score</p>
             <p>
               {new Date(statistics.time * 1000).toISOString().slice(11, 19)}
             </p>
             <p>{statistics.score}</p>
             <Marquee delay={1} speed={25} className="text-xl m-auto">
-              {" "}
-              <p className="mx-2.5">{statistics.info.name}</p>
+              <p className="mx-2.5">{statistics.info.name} - {"artists" in statistics.info  ? statistics.info.artists[0].name : statistics.info.name}</p>
             </Marquee>
             <p>
               {"guesses" in statistics
@@ -98,11 +97,11 @@ export default function ResultsModal({
           </div>
         </div>
         {!getCookie("userID") ? (
-          <div className="flex text-lg font-bold justify-center text-center mx-auto flex-col">
+          <div className="flex gap-2 font-bold justify-center text-center mx-auto flex-col">
             <p>
               Login or sign up to view your score on the global leaderboard!
             </p>
-            <div className="flex justify-center  font-bold text-xl gap-8">
+            <div className="flex justify-center  font-bold text-xl gap-4">
               <ModalButton text="Login" route="/login" />
               <ModalButton text="Sign up" route="/signup" />
             </div>
