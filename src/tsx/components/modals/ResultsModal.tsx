@@ -4,6 +4,7 @@ import LinkButton from "../buttons/PageButton";
 import { getCookie } from "../../utils/Functions";
 import ModalButton from "../buttons/ModalButton";
 import Marquee from "react-fast-marquee";
+import { useCountdown } from "../misc/useCountdown";
 
 export default function ResultsModal({
   game,
@@ -13,6 +14,7 @@ export default function ResultsModal({
   resetGame,
   setIsOpen,
 }: ResultsModalProps) {
+  const [hours, minutes, seconds] = useCountdown();
   return (
     <Modal
       ariaHideApp={false}
@@ -47,6 +49,7 @@ export default function ResultsModal({
             ? `You found "${statistics.info.name}" in ${statistics.guesses} guess${statistics.guesses == 1 ? "" : "es"}!`
             : `You guessed ${statistics.correct} ${statistics.correct} correctly!`}
         </p>
+        <p key={seconds} className="">New Song in {hours}:{minutes}:{seconds}</p>
         <div className="flex text-center justify-around text-lg my-2  text-nowrap">
           <div className="w-1/3 font-medium">
             <p className=" text-md font-bold ">High Score</p>

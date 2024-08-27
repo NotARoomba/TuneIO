@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import Title from "../../components/misc/Title";
-import { callAPI, checkIfLogin } from "../../utils/Functions";
+import { callAPI, checkIfLogin, getCookie, setCookie } from "../../utils/Functions";
 import {
-  SpotifyAlbum,
   STATUS_CODES,
   Song,
   SpotifyTrack,
   GAMES,
   ListeningGame,
   GAME_TYPES,
-  TypingGame,
-  SpotifyArtist,
   User,
   Game,
 } from "../../utils/Types";
@@ -18,8 +15,6 @@ import AlertModal from "../../components/modals/AlertModal";
 import AudioPlayer from "../../components/misc/AudioPlayer";
 import LoadingScreen from "../../components/misc/LoadingScreen";
 import SearchOption from "../../components/misc/SearchOption";
-import ModalButton from "../../components/buttons/ModalButton";
-import PageButton from "../../components/buttons/PageButton";
 import SongGuess from "../../components/misc/SongGuess";
 import ResultsModal from "../../components/modals/ResultsModal";
 import { useNavigate } from "react-router-dom";
@@ -73,6 +68,14 @@ export default function Daily() {
         setGameData(lastGame);
         setGameOver(true);
       }
+    } else {
+      
+      const daily = getCookie("daily")
+      if (daily && new Date(JSON.parse(daily).date).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) { 
+        const lastGame = JSON.parse(daily);
+        setGameData(lastGame);
+        setGameOver(true);
+      }
     }
     const res: { status: STATUS_CODES; song: Song } = await callAPI(
       "/music/daily",
@@ -101,14 +104,18 @@ export default function Daily() {
     if (!guess) return;
     setGuesses([...guesses, guess]);
     setSearchQuery("");
+    setSearch([])
     if (guess.name == song?.info.name) setGameOver(true);
     setGuess(null);
   };
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
-      if (gameOver) setGameOverModal(true);
-      if (searchQuery.length == 0 || (guess && guess.name === searchQuery)) {
+      if (gameOver)  {
+        setLoading(false) 
+        return setGameOverModal(true);
+      }
+      if ((searchQuery.length == 0 || (guess && guess.name === searchQuery))) {
         setLoading(false);
         setSearch([]);
         return;
@@ -164,8 +171,17 @@ export default function Daily() {
           setAlert("There was an error getting your highscore!");
         }
         setHighscore(highscoreRes.highscore);
+      } else {
+        const daily = getCookie("daily")
+        if (!daily || new Date(JSON.parse(daily).date).toLocaleDateString() != new Date(Date.now()).toLocaleDateString()) setCookie("daily",  JSON.stringify({
+          gameType: GAME_TYPES.SONG,
+          time,
+          guesses: guesses.length,
+          score: Math.round((60 / time) * (10 / guesses.length) * 10000),
+          info: song?.info ?? ({} as SpotifyTrack),
+          date: Date.now(),
+        }))
       }
-      setGameData(game);
     };
     setGameOverModal(true);
     setLoading(false);
@@ -177,7 +193,7 @@ export default function Daily() {
       {song && <AudioPlayer song={song} />}
       <input
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.currentTarget.value)}
+        onChange={(e) => {e.preventDefault();setSearchQuery(e.currentTarget.value)}}
         placeholder="input"
         className="mx-auto my-2 text-rich_black text-2xl bg-beige min-h-11 w-72 text-center rounded-lg"
       />

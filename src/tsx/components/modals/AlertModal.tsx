@@ -19,7 +19,7 @@ export default function AlertModal({
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "src/tsx/components/modals/ResultsModal.tsx absolute w-full h-full top-0 left-0 " +
+        "bg-rich_black/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}
