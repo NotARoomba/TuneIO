@@ -112,11 +112,14 @@ const refreshDaily = async () => {
         agent,
       });
       const cutStream = new PassThrough();
-      const seek = Math.round(
-        Math.random() * (search[0].duration / 1000 - 10) + 20,
-      );
+      let seek = 0;
+      let buffer: Buffer = Buffer.from("");
       // console.log(seek, search[0]);
-      ffmpeg(stream)
+      do {
+        seek = Math.round(
+          Math.random() * (search[0].duration / 1000 - 10) + 20,
+        );
+        ffmpeg(stream)
         .seekOutput(seek)
         .setDuration(10)
         .withNoVideo()
@@ -124,7 +127,8 @@ const refreshDaily = async () => {
         .outputOptions("-movflags frag_keyframe+empty_moov")
         .stream(cutStream)
         .on("error", (err) => console.log("Error during conversion: ", err));
-      const buffer = await stream2buffer(cutStream);
+       buffer = await stream2buffer(cutStream);
+      } while (buffer.length < 100)
       dailySong = { stream: buffer, info: { ...info, genre } };
       console.log("Buffer Created!");
     });
