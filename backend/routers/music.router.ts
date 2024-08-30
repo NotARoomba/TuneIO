@@ -120,15 +120,15 @@ const refreshDaily = async () => {
           Math.random() * (search[0].duration / 1000 - 10) + 20,
         );
         ffmpeg(stream)
-        .seekOutput(seek)
-        .setDuration(10)
-        .withNoVideo()
-        .toFormat("wav")
-        .outputOptions("-movflags frag_keyframe+empty_moov")
-        .stream(cutStream)
-        .on("error", (err) => console.log("Error during conversion: ", err));
-       buffer = await stream2buffer(cutStream);
-      } while (buffer.length < 100)
+          .seekOutput(seek)
+          .setDuration(10)
+          .withNoVideo()
+          .toFormat("wav")
+          .outputOptions("-movflags frag_keyframe+empty_moov")
+          .stream(cutStream)
+          .on("error", (err) => console.log("Error during conversion: ", err));
+        buffer = await stream2buffer(cutStream);
+      } while (buffer.length < 100);
       dailySong = { stream: buffer, info: { ...info, genre } };
       console.log("Buffer Created!");
     });

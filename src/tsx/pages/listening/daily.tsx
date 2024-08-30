@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import Title from "../../components/misc/Title";
-import { callAPI, checkIfLogin, getCookie, setCookie } from "../../utils/Functions";
+import {
+  callAPI,
+  checkIfLogin,
+  getCookie,
+  setCookie,
+} from "../../utils/Functions";
 import {
   STATUS_CODES,
   Song,
@@ -69,9 +74,13 @@ export default function Daily() {
         setGameOver(true);
       }
     } else {
-      
-      const daily = getCookie("daily")
-      if (daily && new Date(JSON.parse(daily).date).toLocaleDateString() == new Date(Date.now()).toLocaleDateString()) { 
+      const daily = getCookie("daily");
+      console.log(daily)
+      if (
+        daily &&
+        new Date(JSON.parse(daily).date).toLocaleDateString() ==
+          new Date(Date.now()).toLocaleDateString()
+      ) {
         const lastGame = JSON.parse(daily);
         setGameData(lastGame);
         setGameOver(true);
@@ -104,18 +113,18 @@ export default function Daily() {
     if (!guess) return;
     setGuesses([...guesses, guess]);
     setSearchQuery("");
-    setSearch([])
-    if (guess.name == song?.info.name) setGameOver(true);
+    setSearch([]);
+    if (guess.name == song?.info.name && guess.artists[0].name == song.info.artists[0].name) setGameOver(true);
     setGuess(null);
   };
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
-      if (gameOver)  {
-        setLoading(false) 
+      if (gameOver) {
+        setLoading(false);
         return setGameOverModal(true);
       }
-      if ((searchQuery.length == 0 || (guess && guess.name === searchQuery))) {
+      if (searchQuery.length == 0 || (guess && guess.name === searchQuery)) {
         setLoading(false);
         setSearch([]);
         return;
@@ -172,15 +181,14 @@ export default function Daily() {
         }
         setHighscore(highscoreRes.highscore);
       } else {
-        const daily = getCookie("daily")
-        if (!daily || new Date(JSON.parse(daily).date).toLocaleDateString() != new Date(Date.now()).toLocaleDateString()) setCookie("daily",  JSON.stringify({
-          gameType: GAME_TYPES.SONG,
-          time,
-          guesses: guesses.length,
-          score: Math.round((60 / time) * (10 / guesses.length) * 10000),
-          info: song?.info ?? ({} as SpotifyTrack),
-          date: Date.now(),
-        }))
+        const daily = getCookie("daily");
+        if (
+          !daily ||
+          new Date(JSON.parse(daily).date).toLocaleDateString() !=
+            new Date(Date.now()).toLocaleDateString()
+        )
+          setGameData(game);
+          setCookie("daily", JSON.stringify(game));
       }
     };
     setGameOverModal(true);
@@ -193,7 +201,10 @@ export default function Daily() {
       {song && <AudioPlayer song={song} />}
       <input
         value={searchQuery}
-        onChange={(e) => {e.preventDefault();setSearchQuery(e.currentTarget.value)}}
+        onChange={(e) => {
+          e.preventDefault();
+          setSearchQuery(e.currentTarget.value);
+        }}
         placeholder="input"
         className="mx-auto my-2 text-rich_black text-2xl bg-beige min-h-11 w-72 text-center rounded-lg"
       />
