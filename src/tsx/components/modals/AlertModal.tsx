@@ -15,11 +15,11 @@ export default function AlertModal({
       ariaHideApp={false}
       isOpen={isOpen}
       className={
-        " w-1/6 rounded-xl h-1/3 min-h-80 min-w-80 bg-rich_black text-beige absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 outline-2 outline outline-air_force_blue-200 " +
+        " w-1/6 rounded-xl h-1/3 min-h-80 min-w-80 dark:bg-rich_black bg-paynes_gray/80 text-beige absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 outline-2 outline outline-air_force_blue-200 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "bg-rich_black/80 absolute w-full h-full top-0 left-0 " +
+        "dark:bg-rich_black bg-paynes_gray/80/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}

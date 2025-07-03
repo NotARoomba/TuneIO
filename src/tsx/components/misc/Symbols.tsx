@@ -15,7 +15,7 @@ export default function Symbols() {
   return (
     <ul
       className={
-        "absolute m-0 top-0 left-0 overflow-x-hidden overflow-y-hidden w-full -z-10 bg-rich_black"
+        "absolute m-0 top-0 left-0 overflow-x-hidden overflow-y-hidden w-full -z-10 dark:bg-rich_black bg-paynes_gray/80"
       }
       style={{ height: `${height}px` }}
     >

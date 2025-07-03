@@ -10,7 +10,7 @@ export default function LoadingScreen({
   return (
     <div
       className={
-        "absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-rich_black/80" +
+        "absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 dark:bg-rich_black bg-paynes_gray/80/80" +
         (loading ? " flex animate-show" : " animate-hide")
       }
     >
