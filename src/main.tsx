@@ -10,7 +10,7 @@ import Settings from "./tsx/pages/Settings.tsx";
 import Profile from "./tsx/pages/Profile.tsx";
 import Login from "./tsx/pages/Login.tsx";
 import Signup from "./tsx/pages/Signup.tsx";
-import Daily from "./tsx/pages/listening/Daily.tsx";
+import Daily from "./tsx/pages/listening/daily.tsx";
 
 const router = createBrowserRouter([
   {
